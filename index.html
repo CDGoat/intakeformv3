@@ -128,12 +128,10 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
           <div class="intake-grid cols2">
             <div>
               <label for="firstName">First name</label>
-              <input id="firstName" name="First Name" autocomplete="given-name" required>
-            </div>
+              <input id="firstName" name="First Name" autocomplete="given-name" minlength="2" maxlength="60" required>            </div>
             <div>
               <label for="lastName">Last name</label>
-              <input id="lastName" name="Last Name" autocomplete="family-name" required>
-            </div>
+              <input id="lastName" name="Last Name" autocomplete="family-name" minlength="2" maxlength="60" required>            </div>
             <div>
               <label for="email">
                 Email
@@ -146,8 +144,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
                 Phone
                 <span class="intake-inline-note"><i>(We will not spam you or sell your information. We will only contact you to discuss your project.)</i></span>
               </label>
-              <input id="phone" name="Phone" autocomplete="tel" required>
-            </div>
+<input id="phone" name="Phone" type="tel" autocomplete="tel" inputmode="tel" pattern="^\+?[0-9()\-\s.]{7,20}$" minlength="7" maxlength="20" required>            </div>
           </div>
           <div class="intake-note">
             If we are not the right fit, we will let you know promptly. We appreciate the opportunity either way.
@@ -218,8 +215,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
           <div class="intake-grid cols2" style="margin-top:16px">
             <div>
               <label for="siteCity">Project site city</label>
-              <input id="siteCity" name="Site City" required>
-            </div>
+              <input id="siteCity" name="Site City" minlength="2" maxlength="85" required>            </div>
             <div>
               <label for="siteOwned">Do you currently own the property?</label>
               <select id="siteOwned" name="Site Owned" required>
@@ -405,6 +401,20 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 
   function val(id){ return (document.getElementById(id).value||"").trim(); }
 
+  function normalizeText(value){
+    return (value||"").replace(/\s+/g," ").trim();
+  }
+
+  function normalizeFormValues(){
+    ["firstName","lastName","siteCity"].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.value = normalizeText(el.value);
+    });
+
+    var phone = document.getElementById("phone");
+    if(phone) phone.value = normalizeText(phone.value);
+  }
+
   function isValidEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
   function isValidPhone(p){var digits=p.replace(/\D/g,"");return digits.length>=7 && digits.length<=15;}
 
@@ -454,6 +464,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 
   form.addEventListener("submit",function(e){
     e.preventDefault();
+    normalizeFormValues();
     if(!validateStep(current)) return;
 
     statusMsg.textContent = "Submitting...";
