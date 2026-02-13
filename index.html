@@ -1,20 +1,457 @@
-form.addEventListener("submit", function(e){
-  e.preventDefault();
-  if(!validateStep(current)) return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Intake Questionnaire</title>
+<meta name="description" content="Submit your project details through our intake questionnaire. We will review and follow up promptly.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#e8edf5;--fg:#141c26;--fg78:rgba(20,28,38,0.78);--fg14:rgba(20,28,38,0.14);--fg10:rgba(20,28,38,0.10);--fg06:rgba(20,28,38,0.06);--fg03:rgba(20,28,38,0.03);--fg08:rgba(20,28,38,0.08);--fg12:rgba(20,28,38,0.12);
+  --card:#fff;--card92:rgba(255,255,255,0.92);--card86:rgba(255,255,255,0.86);--card75:rgba(255,255,255,0.75);--card55:rgba(255,255,255,0.55);
+  --border:#c3cad7;--input:#c3cad7;--muted:#525f70;
+  --blue:rgb(47,91,255);--blue55:rgba(47,91,255,0.55);--blue18:rgba(47,91,255,0.18);--blue35:rgba(47,91,255,0.35);--blue06:rgba(47,91,255,0.06);--blue95:rgba(47,91,255,0.95);
+  --gold:rgba(176,141,87,0.85);--gold28:rgba(176,141,87,0.28);--gold10:rgba(176,141,87,0.10);
+  --err:rgba(214,69,69,0.95);
+  --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-serif:ui-serif,Georgia,"Times New Roman",Times,serif;
+}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-height:1.5;-webkit-font-smoothing:antialiased}
 
-  statusMsg.textContent = "Submitting...";
-  statusMsg.style.color = "rgba(80,97,114,.98)";
-  btnSubmit.disabled = true;
+.intake-wrap{max-width:880px;margin:0 auto;padding:34px 16px 70px}
+.intake-brand{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.intake-title{margin:0;font-family:var(--font-sans);font-size:28px;font-weight:600;letter-spacing:.2px;color:var(--fg)}
+.intake-subtitle{margin:10px 0 0;color:var(--muted);font-size:14px;line-height:1.55;max-width:58ch}
+.intake-small{font-size:12px;color:var(--muted);line-height:1.5}
 
-  var data = new FormData(form);
+.intake-card{background:linear-gradient(180deg,var(--card92),var(--card86));border:1px solid var(--border);box-shadow:0 18px 55px var(--fg12);border-radius:18px;overflow:hidden;backdrop-filter:blur(8px)}
+.intake-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--card75),var(--card55))}
+.intake-steps{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.intake-pill{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border-radius:999px;border:1px solid var(--border);font-size:12px;color:var(--muted);background:var(--card75)}
+.intake-pill b{color:var(--fg);font-weight:650}
+.intake-progress{flex:1;height:8px;background:var(--fg06);border:1px solid var(--fg08);border-radius:999px;overflow:hidden;min-width:170px;max-width:330px}
+.intake-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--blue95),var(--gold));transition:width .3s ease}
+.intake-content{padding:22px}
+.intake-grid{display:grid;gap:16px}
+@media(min-width:740px){.intake-grid.cols2{grid-template-columns:1fr 1fr}}
+.intake-content label{display:block;font-size:13px;color:var(--fg78);margin-bottom:7px}
+.intake-inline-note{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+.intake-content input,.intake-content select,.intake-content textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid var(--input);background:var(--card);color:var(--fg);font-size:14px;box-shadow:0 1px 0 var(--fg03);font-family:inherit}
+.intake-content textarea{min-height:96px;resize:vertical}
+.intake-content input:focus,.intake-content select:focus,.intake-content textarea:focus{border-color:var(--blue55);box-shadow:0 0 0 4px var(--blue18);outline:none}
+.intake-hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+.intake-note{margin-top:12px;padding:14px;border-radius:14px;border:1px solid var(--gold28);background:linear-gradient(180deg,var(--gold10),transparent);color:var(--muted);font-size:12.8px;line-height:1.5}
+.intake-radio-group{border:1px solid var(--input);border-radius:14px;background:var(--card);padding:10px}
+.intake-radio-item{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;transition:background .15s ease;cursor:pointer}
+.intake-radio-item:hover{background:var(--fg03)}
+.intake-radio-item input[type="radio"]{width:18px;height:18px;margin-top:2px;flex:0 0 auto;accent-color:var(--blue)}
+.intake-radio-item b{font-weight:650;color:var(--fg)}
+.intake-other-wrap{margin-top:8px}
+.intake-other-wrap input{margin-top:10px}
+.intake-checkbox{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:14px;border:1px solid var(--blue18);background:linear-gradient(180deg,var(--blue06),transparent)}
+.intake-checkbox input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--blue);flex:0 0 auto}
+.intake-checkbox b{color:var(--fg)}
+.intake-btns{display:flex;gap:10px;justify-content:space-between;margin-top:20px;flex-wrap:wrap}
+.intake-btns button{border:1px solid var(--fg14);background:var(--card75);color:var(--fg);padding:11px 16px;border-radius:12px;cursor:pointer;font-weight:650;font-size:14px;transition:transform .05s ease,background .15s ease,box-shadow .15s ease;font-family:inherit}
+.intake-btns button:hover{background:var(--card92)}
+.intake-btns button:active{transform:translateY(1px)}
+.intake-btns button:disabled{opacity:.45;cursor:not-allowed}
+.intake-btns button.primary{color:#fff;border-color:var(--blue35);background:linear-gradient(90deg,var(--blue95),var(--gold));box-shadow:0 10px 26px var(--blue18)}
+.intake-btns button.primary:hover{box-shadow:0 12px 30px rgba(47,91,255,.22)}
+.intake-result{padding:14px;border-radius:14px;border:1px solid var(--input);background:var(--card);margin-top:14px}
+.intake-result-text{margin:10px 0 0;color:var(--fg);line-height:1.5}
+.intake-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--fg14);font-size:12px;color:var(--muted);background:var(--card75)}
+.intake-badge span{font-weight:700;color:var(--fg)}
+.intake-legal{margin-top:16px;padding-top:12px;border-top:1px solid var(--fg10);font-size:12px;color:var(--muted);line-height:1.55}
+.intake-legal b{color:var(--fg)}
+.intake-footer{margin-top:16px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.intake-result a{color:var(--blue);text-decoration:none}
+.intake-result a:hover{text-decoration:underline}
+.step{display:none}.step.active{display:block}
+</style>
+</head>
+<body>
 
-  fetch("/", { method: "POST", body: data })
-    .then(function(){
-      form.parentElement.parentElement.style.display = "none";
-      thankYou.style.display = "block";
-    })
-    .catch(function(){
-      setError("Something went wrong submitting the form. Please try again.");
-      btnSubmit.disabled = false;
+<div class="intake-wrap">
+  <div class="intake-brand">
+    <div>
+      <h1 class="intake-title">Project Intake Questionnaire</h1>
+      <p class="intake-subtitle">This questionnaire helps us respond quickly and responsibly.</p>
+    </div>
+    <div class="intake-small">Estimated time, 2 to 4 minutes.</div>
+  </div>
+
+  <div class="intake-card" role="main" aria-label="Project Intake Wizard">
+    <div class="intake-topbar">
+      <div class="intake-steps">
+        <div class="intake-pill" id="stepLabel">
+          <b>Step 1</b>
+          <span>Contact</span>
+        </div>
+      </div>
+      <div class="intake-progress" aria-label="Progress">
+        <div class="intake-bar" id="progressBar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="intake-content">
+      <form id="intakeForm" novalidate>
+
+        <div class="step active" id="step1">
+          <div class="intake-grid cols2">
+            <div>
+              <label for="firstName">First name</label>
+              <input id="firstName" name="First Name" autocomplete="given-name" required>
+            </div>
+            <div>
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="Last Name" autocomplete="family-name" required>
+            </div>
+            <div>
+              <label for="email">
+                Email
+                <span class="intake-inline-note"><i>(We will not spam you or sell your information. We will only contact you to discuss your project.)</i></span>
+              </label>
+              <input id="email" name="Email" type="email" autocomplete="email" required>
+            </div>
+            <div>
+              <label for="phone">
+                Phone
+                <span class="intake-inline-note"><i>(We will not spam you or sell your information. We will only contact you to discuss your project.)</i></span>
+              </label>
+              <input id="phone" name="Phone" autocomplete="tel" required>
+            </div>
+          </div>
+          <div class="intake-note">
+            If we are not the right fit, we will let you know promptly. We appreciate the opportunity either way.
+          </div>
+        </div>
+
+        <div class="step" id="step2">
+          <div class="intake-grid cols2">
+            <div>
+              <label for="projectType">Project type</label>
+              <select id="projectType" name="Project Type" required>
+                <option value="">Select one</option>
+                <option value="Single-family, new construction">Single-family, new construction</option>
+                <option value="Single-family, renovation">Single-family, renovation</option>
+                <option value="Multifamily, new construction">Multifamily, new construction</option>
+                <option value="Multifamily, renovation">Multifamily, renovation</option>
+                <option value="Not sure yet">Not sure yet</option>
+              </select>
+            </div>
+            <div>
+              <label for="timeline">Ideal start timeline</label>
+              <select id="timeline" name="Timeline" required>
+                <option value="">Select one</option>
+                <option value="0 to 3 months">0 to 3 months</option>
+                <option value="3 to 6 months">3 to 6 months</option>
+                <option value="6 to 12 months">6 to 12 months</option>
+                <option value="12+ months">12+ months</option>
+              </select>
+              <div class="intake-hint">This is about when you want design to begin.</div>
+            </div>
+            <div>
+              <label for="budgetRange">Estimated construction budget</label>
+              <select id="budgetRange" name="Budget Range" required>
+                <option value="">Select one</option>
+                <option value="Under $500,000">Under $500,000</option>
+                <option value="$500,000 to $750,000">$500,000 to $750,000</option>
+                <option value="$750,000 to $1,000,000">$750,000 to $1,000,000</option>
+                <option value="$1,000,000 to $2,000,000">$1,000,000 to $2,000,000</option>
+                <option value="$2,000,000 to $4,000,000">$2,000,000 to $4,000,000</option>
+                <option value="Over $4,000,000">Over $4,000,000</option>
+              </select>
+            </div>
+            <div>
+              <label for="projectSize">Anticipated project size</label>
+              <select id="projectSize" name="Project Size">
+                <option value="">Select one</option>
+                <option value="Less than 1,000 sf">Less than 1,000 sf</option>
+                <option value="1,000 sf to 2,000 sf">1,000 sf to 2,000 sf</option>
+                <option value="2,000 sf to 3,000 sf">2,000 sf to 3,000 sf</option>
+                <option value="3,000 sf to 4,000 sf">3,000 sf to 4,000 sf</option>
+                <option value="4,000 sf to 5,000 sf">4,000 sf to 5,000 sf</option>
+                <option value="More than 5,000 sf">More than 5,000 sf</option>
+                <option value="Unsure">Unsure</option>
+              </select>
+            </div>
+            <div>
+              <label for="siteState">Project site state</label>
+              <select id="siteState" name="Site State" required>
+                <option value="">Select one</option>
+                <option value="WA">WA</option>
+                <option value="OR">OR</option>
+                <option value="ID">ID</option>
+                <option value="CA">CA</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="intake-grid cols2" style="margin-top:16px">
+            <div>
+              <label for="siteCity">Project site city</label>
+              <input id="siteCity" name="Site City" required>
+            </div>
+            <div>
+              <label for="siteOwned">Do you currently own the property?</label>
+              <select id="siteOwned" name="Site Owned" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Under contract">Under contract</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" id="step3">
+          <div class="intake-grid cols2">
+            <div>
+              <label for="workedWithArchitect">Have you worked with an architect before?</label>
+              <select id="workedWithArchitect" name="Worked With Architect" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label for="haveSurvey">Do you have a site survey?</label>
+              <select id="haveSurvey" name="Have Survey" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Not sure">Not sure</option>
+              </select>
+            </div>
+            <div>
+              <label for="financing">Is financing secured or planned?</label>
+              <select id="financing" name="Financing" required>
+                <option value="">Select one</option>
+                <option value="Secured">Secured</option>
+                <option value="Planned">Planned</option>
+                <option value="Not sure yet">Not sure yet</option>
+              </select>
+            </div>
+            <div>
+              <label for="decisionMaker">Are you a primary decision-maker for this project?</label>
+              <select id="decisionMaker" name="Decision Maker" required>
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="Shared">Shared</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="intake-grid" style="margin-top:16px">
+            <div>
+              <label>Scope (select one)</label>
+              <div class="intake-radio-group" role="radiogroup" aria-label="Scope">
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="New home design"><span><b>New home design</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="Full home renovation"><span><b>Full home renovation</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="Major addition or renovation"><span><b>Major addition or renovation</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="Kitchen renovation"><span><b>Kitchen renovation</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="Primary suite renovation"><span><b>Primary suite renovation</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="Basement or attic conversion"><span><b>Basement or attic conversion</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="ADU or DADU"><span><b>ADU or DADU</b></span></label>
+                <label class="intake-radio-item"><input type="radio" name="Scope" value="Multifamily planning"><span><b>Multifamily planning</b></span></label>
+                <div class="intake-other-wrap">
+                  <label class="intake-radio-item" style="margin:0">
+                    <input type="radio" name="Scope" value="Other" id="scopeOtherRadio">
+                    <span><b>Other</b> <span class="intake-small">Tell us briefly.</span></span>
+                  </label>
+                  <input id="scopeOtherDetail" name="Scope Detail" placeholder="Describe the scope" style="margin-top:10px;display:none">
+                  <div class="intake-hint">If you select Other, please fill in the description.</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="goals">What matters most to you in this project? (optional)</label>
+              <textarea id="goals" name="Project Goals" placeholder="Example: long-term durability, modern design, energy performance, natural light, thoughtful planning"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" id="step4">
+          <div class="intake-grid">
+            <div class="intake-checkbox">
+              <input id="agreePrivacy" type="checkbox" name="Consent" value="Yes, I consent to being contacted" required>
+              <div>
+                <b>Consent to contact</b>
+                <div class="intake-small">
+                  I consent to being contacted about this inquiry. <i>(We will not spam you or sell your information. We will only contact you to discuss your project.)</i> This is not a contract for services.
+                </div>
+              </div>
+            </div>
+            <div class="intake-result">
+              <div class="intake-small">Once complete, hit Submit below and someone from our team will be in touch soon.</div>
+            </div>
+            <div class="intake-legal">
+              <div><b>Privacy note:</b> We use this questionnaire only to evaluate fit and respond to your inquiry.</div>
+              <div><b>Not legal advice:</b> Nothing here is legal advice. We do not guarantee permitting outcomes or construction costs.</div>
+              <div><b>Not a contract:</b> Submission does not create an architect-client relationship or contract.</div>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" name="_subject" value="New Project Intake Submission">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="true">
+
+        <div class="intake-btns">
+          <button type="button" id="btnBack" disabled>Back</button>
+          <button type="button" id="btnNext" class="primary">Next</button>
+          <button type="submit" id="btnSubmit" class="primary" style="display:none">Submit</button>
+        </div>
+
+        <div class="intake-footer">
+          <div class="intake-small">Project intake form</div>
+          <div class="intake-small" id="statusMsg"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="thankYou" style="display:none">
+    <div class="intake-card">
+      <div class="intake-topbar">
+        <div class="intake-steps"><div class="intake-pill"><b>Complete</b></div></div>
+        <div class="intake-progress"><div class="intake-bar" style="width:100%"></div></div>
+      </div>
+      <div class="intake-content">
+        <div class="intake-result" id="resultQualified">
+          <div class="intake-badge"><span>Submitted</span></div>
+          <p class="intake-result-text">Thank you. We received your questionnaire.</p>
+          <p class="intake-small" style="margin-top:10px">We will not spam you or sell your information. We will only contact you to discuss your project.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var STEP_TITLES = {1:"Contact",2:"Project basics",3:"Project details",4:"Consent"};
+  var TOTAL = 4;
+  var current = 1;
+
+  var form = document.getElementById("intakeForm");
+  var btnNext = document.getElementById("btnNext");
+  var btnBack = document.getElementById("btnBack");
+  var btnSubmit = document.getElementById("btnSubmit");
+  var statusMsg = document.getElementById("statusMsg");
+  var stepLabel = document.getElementById("stepLabel");
+  var progressBar = document.getElementById("progressBar");
+  var thankYou = document.getElementById("thankYou");
+  var scopeOtherRadio = document.getElementById("scopeOtherRadio");
+  var scopeOtherDetail = document.getElementById("scopeOtherDetail");
+
+  document.querySelectorAll('input[name="Scope"]').forEach(function(r){
+    r.addEventListener("change",function(){
+      scopeOtherDetail.style.display = scopeOtherRadio.checked ? "block" : "none";
+      if(!scopeOtherRadio.checked) scopeOtherDetail.value = "";
     });
-});
+  });
+
+  function showStep(n){
+    current = n;
+    document.querySelectorAll(".step").forEach(function(s){s.classList.remove("active")});
+    document.getElementById("step"+n).classList.add("active");
+    stepLabel.innerHTML = "<b>Step "+n+"</b><span>"+STEP_TITLES[n]+"</span>";
+    progressBar.style.width = (((n-1)/(TOTAL-1))*100)+"%";
+    btnBack.disabled = n===1;
+    btnNext.style.display = n<TOTAL ? "" : "none";
+    btnSubmit.style.display = n===TOTAL ? "" : "none";
+    statusMsg.textContent = "";
+    statusMsg.style.color = "";
+  }
+
+  function setError(msg){
+    statusMsg.textContent = msg;
+    statusMsg.style.color = "rgba(214,69,69,.95)";
+  }
+
+  function val(id){ return (document.getElementById(id).value||"").trim(); }
+
+  function isValidEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
+  function isValidPhone(p){var digits=p.replace(/\D/g,"");return digits.length>=7 && digits.length<=15;}
+
+  function validateStep(n){
+    if(n===1){
+      if(!val("firstName")||!val("lastName")||!val("email")||!val("phone")){
+        setError("Please complete the required fields on this step."); return false;
+      }
+      if(!isValidEmail(val("email"))){
+        setError("Please enter a valid email address."); return false;
+      }
+      if(!isValidPhone(val("phone"))){
+        setError("Please enter a valid phone number."); return false;
+      }
+    }
+    if(n===2){
+      if(!val("projectType")||!val("timeline")||!val("budgetRange")||!val("siteState")||!val("siteCity")||!val("siteOwned")){
+        setError("Please complete the required fields on this step."); return false;
+      }
+    }
+    if(n===3){
+      if(!val("workedWithArchitect")||!val("haveSurvey")||!val("financing")||!val("decisionMaker")){
+        setError("Please complete the required fields on this step."); return false;
+      }
+      var scope = document.querySelector('input[name="Scope"]:checked');
+      if(!scope){ setError("Please select a scope to continue."); return false; }
+      if(scope.value==="Other" && !val("scopeOtherDetail")){
+        setError("Please describe the scope for Other to continue."); return false;
+      }
+    }
+    if(n===4){
+      if(!document.getElementById("agreePrivacy").checked){
+        setError("Please check the consent box to continue."); return false;
+      }
+    }
+    return true;
+  }
+
+  btnNext.addEventListener("click",function(){
+    if(!validateStep(current)) return;
+    showStep(current+1);
+  });
+
+  btnBack.addEventListener("click",function(){
+    if(current>1) showStep(current-1);
+  });
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!validateStep(current)) return;
+
+    statusMsg.textContent = "Submitting...";
+    statusMsg.style.color = "rgba(80,97,114,.98)";
+    btnSubmit.disabled = true;
+
+    form.action = "https://formsubmit.co/contact@seattle-architects.com";
+    form.method = "POST";
+
+    var afterUrl = window.location.href;
+    if(afterUrl.indexOf("?")!==-1) afterUrl = afterUrl.split("?")[0];
+
+    var nextInput = document.createElement("input");
+    nextInput.type = "hidden";
+    nextInput.name = "_next";
+    nextInput.value = afterUrl + "?submitted=1";
+    form.appendChild(nextInput);
+
+    form.submit();
+  });
+
+  var params = new URLSearchParams(window.location.search);
+  if(params.get("submitted")==="1"){
+    form.parentElement.parentElement.style.display = "none";
+    thankYou.style.display = "block";
+    document.getElementById("resultQualified").style.display = "";
+    history.replaceState(null,"",window.location.pathname);
+  }
+})();
+</script>
+</body>
+</html>
