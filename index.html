@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Project Intake Questionnaire</title>
+  <meta name="description" content="A short project intake questionnaire for Coates Design." />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#111826;
+      --muted:#9aa4b2;
+      --text:#e6edf3;
+      --accent:#6ea8fe;
+      --danger:#ff6b6b;
+      --ok:#51cf66;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 14px 40px rgba(0,0,0,.45);
+      --radius: 16px;
+      --pad: 20px;
+      --max: 860px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(110,168,254,.15), transparent 60%),
+                  radial-gradient(1000px 800px at 90% 10%, rgba(81,207,102,.10), transparent 60%),
+                  var(--bg);
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin: 0 auto; padding: 28px 16px 60px;}
+    .brand{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+      margin-bottom:18px;
+    }
+    .brand h1{margin:0; font-size:22px; letter-spacing:.2px}
+    .brand p{margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.4}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 14px var(--pad);
+      border-bottom: 1px solid var(--line);
+      background: rgba(0,0,0,.12);
+    }
+    .steps{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .pill b{color:var(--text); font-weight:600}
+    .progress{
+      flex:1;
+      height:10px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      border-radius:999px;
+      overflow:hidden;
+      min-width: 160px;
+      max-width: 320px;
+    }
+    .bar{height:100%; width:0%; background: rgba(110,168,254,.8)}
+    .content{padding: var(--pad)}
+    .grid{display:grid; gap:14px}
+    @media (min-width: 740px){ .grid.cols2{grid-template-columns: 1fr 1fr;} }
+    label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
+    input, select, textarea{
+      width:100%;
+      box-sizing:border-box;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+      font-size: 14px;
+    }
+    textarea{min-height: 90px; resize: vertical;}
+    input:focus, select:focus, textarea:focus{border-color: rgba(110,168,254,.7); box-shadow: 0 0 0 3px rgba(110,168,254,.15)}
+    .hint{font-size:12px; color:var(--muted); margin-top:6px; line-height:1.35}
+    .inline-note{font-size:12px; color:var(--muted); margin-left:8px}
+    .btns{display:flex; gap:10px; justify-content:space-between; margin-top:18px; flex-wrap:wrap}
+    button{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:14px;
+    }
+    button.primary{background: rgba(110,168,254,.22); border-color: rgba(110,168,254,.35)}
+    button.primary:hover{background: rgba(110,168,254,.28)}
+    button:disabled{opacity:.45; cursor:not-allowed}
+    .note{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+    .result{
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      margin-top: 14px;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .badge.ok{border-color: rgba(81,207,102,.40); background: rgba(81,207,102,.10)}
+    .badge.no{border-color: rgba(255,107,107,.40); background: rgba(255,107,107,.10)}
+    .badge span{font-weight:700; color: var(--text)}
+    .small{font-size:12px; color:var(--muted); line-height:1.4}
+    .legal{
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .checkbox{
+      display:flex; gap:10px; align-items:flex-start;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
+    .checkbox input{width:18px; height:18px; margin-top:2px}
+    .checkbox b{color:var(--text)}
+    .hidden{display:none !important}
+    .footer{
+      margin-top:16px; color:var(--muted); font-size:12px;
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    }
+
+    /* Radio group styling */
+    .radio-group{
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      padding: 10px 12px;
+    }
+    .radio-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 10px;
+    }
+    .radio-item:hover{background: rgba(255,255,255,.04)}
+    .radio-item input[type="radio"]{
+      width:18px;
+      height:18px;
+      margin-top:2px;
+      flex:0 0 auto;
+    }
+    .radio-item .txt{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .other-wrap{
+      margin-top:8px;
+    }
+    .other-wrap input{
+      margin-top:8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div>
+        <h1>Project Intake Questionnaire</h1>
+        <p>Coates Design, Seattle and Pacific Northwest. This questionnaire helps us respond quickly and responsibly.</p>
+      </div>
+      <div class="small">Estimated time, 2 to 4 minutes.</div>
+    </div>
+
+    <div class="card" role="main" aria-label="Project Intake Wizard">
+      <div class="topbar">
+        <div class="steps">
+          <div class="pill"><b id="stepLabel">Step 1</b><span id="stepName">Contact</span></div>
+        </div>
+        <div class="progress" aria-label="Progress">
+          <div class="bar" id="bar"></div>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- NETLIFY FORM: add name/method/data-netlify + hidden form-name + honeypot -->
+        <form
+          id="intakeForm"
+          name="intake"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="intake" />
+          <p class="hidden">
+            <label>Don’t fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <!-- STEP 1 -->
+          <section class="step" data-step="1">
+            <div class="grid cols2">
+              <div>
+                <label for="firstName">First name</label>
+                <input id="firstName" name="firstname" autocomplete="given-name" required />
+              </div>
+              <div>
+                <label for="lastName">Last name</label>
+                <input id="lastName" name="lastname" autocomplete="family-name" required />
+              </div>
+
+              <div>
+                <label for="email">
+                  Email
+                  <span class="inline-note">We will not spam you or sell your information. We will only contact you to discuss your project.</span>
+                </label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
+              <div>
+                <label for="phone">
+                  Phone
+                  <span class="inline-note">We will not spam you or sell your information. We will only contact you to discuss your project.</span>
+                </label>
+                <input id="phone" name="phone" autocomplete="tel" required />
+              </div>
+            </div>
+
+            <div class="note">
+              If we are not the right fit, we will let you know promptly. We appreciate the opportunity either way.
+            </div>
+          </section>
+
+          <!-- STEP 2 -->
+          <section class="step hidden" data-step="2">
+            <div class="grid cols2">
+              <div>
+                <label for="projectType">Project type</label>
+                <select id="projectType" name="project_type" required>
+                  <option value="">Select one</option>
+                  <option>Single-family, new construction</option>
+                  <option>Single-family, renovation</option>
+                  <option>Multifamily, new construction</option>
+                  <option>Multifamily, renovation</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="timeline">Ideal start timeline</label>
+                <select id="timeline" name="timeline" required>
+                  <option value="">Select one</option>
+                  <option>0 to 3 months</option>
+                  <option>3 to 6 months</option>
+                  <option>6 to 12 months</option>
+                  <option>12+ months</option>
+                </select>
+                <div class="hint">This is about when you want design to begin.</div>
+              </div>
+
+              <div>
+                <label for="budgetRange">Estimated construction budget</label>
+                <select id="budgetRange" name="budget_range" required>
+                  <option value="">Select one</option>
+                  <option value="lt500">Under $500,000</option>
+                  <option value="500-750">$500,000 to $750,000</option>
+                  <option value="750-1000">$750,000 to $1,000,000</option>
+                  <option value="1000-2000">$1,000,000 to $2,000,000</option>
+                  <option value="gt2000">Over $2,000,000</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="siteState">Project site state</label>
+                <select id="siteState" name="site_state" required>
+                  <option value="">Select one</option>
+                  <option>WA</option>
+                  <option>OR</option>
+                  <option>ID</option>
+                  <option>CA</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid cols2">
+              <div>
+                <label for="siteAddress">Project site address</label>
+                <input id="siteAddress" name="site_address" autocomplete="street-address" required />
+              </div>
+              <div>
+                <label for="siteCity">Project site city</label>
+                <input id="siteCity" name="site_city" required />
+              </div>
+              <div>
+                <label for="siteZip">Project site ZIP</label>
+                <input id="siteZip" name="site_zip" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="siteIsOwned">Do you currently own the property?</label>
+                <select id="siteIsOwned" name="site_owned" required>
+                  <option value="">Select one</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="under_contract">Under contract</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div>
+                <label for="billingAddress">Billing address (if different)</label>
+                <input id="billingAddress" name="billing_address" placeholder="Optional if same as your mailing address" />
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 3 -->
+          <section class="step hidden" data-step="3">
+            <div class="grid cols2">
+              <div>
+                <label for="workedWithArchitect">Have you worked with an architect before?</label>
+                <select id="workedWithArchitect" name="worked_with_architect" required>
+                  <option value="">Select one</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="haveSurvey">Do you have a survey?</label>
+                <select id="haveSurvey" name="have_survey" required>
+                  <option value="">Select one</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="not_sure">Not sure</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="haveFinancing">Is financing secured or planned?</label>
+                <select id="haveFinancing" name="financing" required>
+                  <option value="">Select one</option>
+                  <option value="secured">Secured</option>
+                  <option value="planned">Planned</option>
+                  <option value="unknown">Not sure yet</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="decisionMaker">Are you a primary decision-maker for this project?</label>
+                <select id="decisionMaker" name="decision_maker" required>
+                  <option value="">Select one</option>
+                  <option value="yes">Yes</option>
+                  <option value="shared">Shared</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div>
+                <label>Scope (select one)</label>
+                <div class="radio-group" role="radiogroup" aria-label="Scope">
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="Full home renovation" required />
+                    <span class="txt"><b>Full home renovation</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="Major addition" required />
+                    <span class="txt"><b>Major addition</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="Kitchen renovation" required />
+                    <span class="txt"><b>Kitchen renovation</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="Primary suite renovation" required />
+                    <span class="txt"><b>Primary suite renovation</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="Basement or attic conversion" required />
+                    <span class="txt"><b>Basement or attic conversion</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="ADU or DADU" required />
+                    <span class="txt"><b>ADU or DADU</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="New home planning" required />
+                    <span class="txt"><b>New home planning</b></span>
+                  </label>
+
+                  <label class="radio-item">
+                    <input type="radio" name="scope_selected" value="Multifamily planning" required />
+                    <span class="txt"><b>Multifamily planning</b></span>
+                  </label>
+
+                  <div class="other-wrap">
+                    <label class="radio-item" style="margin:0;">
+                      <input type="radio" name="scope_selected" value="Other" required id="scopeOtherRadio" />
+                      <span class="txt"><b>Other</b><span class="small">Tell us briefly.</span></span>
+                    </label>
+                    <input id="scopeOtherText" name="scope_other_detail" placeholder="Describe the scope" class="hidden" />
+                    <div class="hint">If you select Other, please fill in the description.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="goals">What matters most to you in this project? (optional)</label>
+                <textarea id="goals" name="project_goals" placeholder="Example: long-term durability, modern design, energy performance, natural light, thoughtful planning"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 4 -->
+          <section class="step hidden" data-step="4">
+            <div class="grid">
+              <div class="checkbox">
+                <input id="agreePrivacy" type="checkbox" name="agree_privacy" required />
+                <div>
+                  <b>Consent to contact</b>
+                  <div class="small">
+                    I consent to being contacted by Coates Design about this inquiry. We will not spam you or sell your information. We will only contact you to discuss your project. This is not a contract for services.
+                  </div>
+                </div>
+              </div>
+
+              <div class="result" id="finalResult">
+                <div class="badge" id="finalBadge"><span>Ready</span></div>
+                <div class="small" id="finalText">When you submit, we will review and follow up.</div>
+              </div>
+
+              <div class="legal">
+                <div><b>Privacy note:</b> We use this questionnaire only to evaluate fit and respond to your inquiry.</div>
+                <div><b>Not legal advice:</b> Nothing here is legal advice. We do not guarantee permitting outcomes or construction costs.</div>
+                <div><b>Not a contract:</b> Submission does not create an architect-client relationship or contract.</div>
+              </div>
+            </div>
+          </section>
+
+          <input type="hidden" name="qualification_status" id="qualification_status" />
+          <input type="hidden" name="qualification_reasons" id="qualification_reasons" />
+          <input type="hidden" name="qualification_score" id="qualification_score" />
+
+          <div class="btns">
+            <button type="button" id="backBtn">Back</button>
+            <button type="button" class="primary" id="nextBtn">Next</button>
+            <button type="submit" class="primary hidden" id="submitBtn">Submit</button>
+          </div>
+
+          <div class="footer">
+            <div class="small">Coates Design, Seattle, Pacific Northwest</div>
+            <div class="small" id="statusLine"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // -----------------------------
+  // CONFIG YOU SHOULD EDIT
+  // -----------------------------
+  const CONFIG = {
+    // Put your real calendly link here if you want it shown after submission
+    calendlyUrl: "YOUR_CALENDLY_LINK",
+
+    // Service area, adjust as you prefer.
+    allowedStates: ["WA", "OR", "ID"],
+
+    // Internal qualification rules (not displayed during the questionnaire).
+    minBudgetDisqualifyValues: ["lt500"],
+
+    allowedProjectTypes: new Set([
+      "Single-family, new construction",
+      "Single-family, renovation",
+      "Multifamily, new construction",
+      "Multifamily, renovation",
+      "Not sure yet"
+    ])
+  };
+
+  // -----------------------------
+  // WIZARD STATE
+  // -----------------------------
+  const form = document.getElementById("intakeForm");
+  const steps = Array.from(document.querySelectorAll(".step"));
+  const bar = document.getElementById("bar");
+  const stepLabel = document.getElementById("stepLabel");
+  const stepName = document.getElementById("stepName");
+  const nextBtn = document.getElementById("nextBtn");
+  const backBtn = document.getElementById("backBtn");
+  const submitBtn = document.getElementById("submitBtn");
+  const statusLine = document.getElementById("statusLine");
+
+  const finalBadge = document.getElementById("finalBadge");
+  const finalText = document.getElementById("finalText");
+
+  const hiddenStatus = document.getElementById("qualification_status");
+  const hiddenReasons = document.getElementById("qualification_reasons");
+  const hiddenScore = document.getElementById("qualification_score");
+
+  const scopeOtherText = document.getElementById("scopeOtherText");
+
+  const stepTitles = {
+    1: "Contact",
+    2: "Project basics",
+    3: "Project details",
+    4: "Consent"
+  };
+
+  let current = 1;
+
+  function showStep(n) {
+    current = n;
+    steps.forEach(s => s.classList.toggle("hidden", Number(s.dataset.step) !== n));
+    const pct = ((n - 1) / (steps.length - 1)) * 100;
+    bar.style.width = `${pct}%`;
+    stepLabel.textContent = `Step ${n}`;
+    stepName.textContent = stepTitles[n] || "";
+    backBtn.disabled = n === 1;
+    nextBtn.classList.toggle("hidden", n === steps.length);
+    submitBtn.classList.toggle("hidden", n !== steps.length);
+
+    statusLine.textContent = "";
+  }
+
+  function validateStep(n) {
+    const step = steps.find(s => Number(s.dataset.step) === n);
+    if (!step) return true;
+
+    // Special case: "Other scope" requires text if selected
+    const scopeSelected = form.querySelector('input[name="scope_selected"]:checked');
+    const otherSelected = scopeSelected && scopeSelected.value === "Other";
+    if (n === 3) {
+      if (!scopeSelected) {
+        statusLine.textContent = "Please select a scope to continue.";
+        statusLine.style.color = "rgba(255,107,107,.95)";
+        return false;
+      }
+      if (otherSelected) {
+        const v = String(scopeOtherText.value || "").trim();
+        if (!v) {
+          statusLine.textContent = "Please describe the scope for Other to continue.";
+          statusLine.style.color = "rgba(255,107,107,.95)";
+          return false;
+        }
+      }
+    }
+
+    const required = Array.from(step.querySelectorAll("[required]"));
+    let ok = true;
+
+    for (const el of required) {
+      if (el.type === "checkbox") {
+        if (!el.checked) ok = false;
+      } else if (el.type === "radio") {
+        continue;
+      } else {
+        if (!String(el.value || "").trim()) ok = false;
+      }
+      if (!ok) break;
+    }
+
+    if (!ok) {
+      statusLine.textContent = "Please complete the required fields on this step.";
+      statusLine.style.color = "rgba(255,107,107,.95)";
+    } else {
+      statusLine.textContent = "";
+    }
+    return ok;
+  }
+
+  // -----------------------------
+  // QUALIFICATION LOGIC (NOT SHOWN DURING SURVEY)
+  // -----------------------------
+  function getVal(id) {
+    const el = document.getElementById(id);
+    return el ? String(el.value || "").trim() : "";
+  }
+  function qualify() {
+    const reasons = [];
+    let score = 100;
+
+    const budget = getVal("budgetRange");
+    const state = getVal("siteState");
+    const ptype = getVal("projectType");
+    const decisionMaker = getVal("decisionMaker");
+    const agreePrivacy = document.getElementById("agreePrivacy")?.checked;
+
+    if (CONFIG.minBudgetDisqualifyValues.includes(budget)) {
+      reasons.push("Construction budget is below our current minimum.");
+      score -= 70;
+    }
+    if (state && !CONFIG.allowedStates.includes(state)) {
+      reasons.push("Project location appears outside our current service area.");
+      score -= 60;
+    }
+    if (ptype && !CONFIG.allowedProjectTypes.has(ptype)) {
+      reasons.push("Project type appears outside our current focus.");
+      score -= 50;
+    }
+    if (decisionMaker === "no") {
+      reasons.push("Primary decision-maker not identified.");
+      score -= 15;
+    }
+    if (agreePrivacy !== true) {
+      reasons.push("Consent to contact not provided.");
+      score -= 90;
+    }
+
+    const qualified = (
+      !CONFIG.minBudgetDisqualifyValues.includes(budget) &&
+      (state ? CONFIG.allowedStates.includes(state) : true) &&
+      score >= 55 &&
+      agreePrivacy === true
+    );
+
+    return {
+      qualified,
+      score: Math.max(0, Math.min(100, score)),
+      reasons: reasons.length ? reasons : ["Meets baseline fit requirements."]
+    };
+  }
+
+  function setHiddenQualification(q) {
+    hiddenStatus.value = q.qualified ? "Qualified" : "Not qualified";
+    hiddenScore.value = String(q.score);
+    hiddenReasons.value = q.reasons.join(" | ");
+  }
+
+  // -----------------------------
+  // NETLIFY SUBMISSION
+  // -----------------------------
+  async function submitToNetlify() {
+    const formData = new FormData(form);
+
+    // Ensure scope_other_detail is blank unless Other selected
+    const scopeSelected = form.querySelector('input[name="scope_selected"]:checked');
+    if (!scopeSelected || scopeSelected.value !== "Other") {
+      formData.set("scope_other_detail", "");
+    }
+
+    // Netlify expects URL-encoded form body
+    const body = new URLSearchParams();
+    for (const [k, v] of formData.entries()) body.append(k, String(v));
+
+    const res = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString()
+    });
+
+    if (!res.ok) throw new Error(`Netlify submission failed (${res.status})`);
+  }
+
+  // -----------------------------
+  // EVENTS
+  // -----------------------------
+  nextBtn.addEventListener("click", () => {
+    if (!validateStep(current)) return;
+    showStep(Math.min(steps.length, current + 1));
+  });
+
+  backBtn.addEventListener("click", () => {
+    showStep(Math.max(1, current - 1));
+  });
+
+  // Scope "Other" reveal
+  form.addEventListener("change", (e) => {
+    if (e.target && e.target.name === "scope_selected") {
+      const selected = form.querySelector('input[name="scope_selected"]:checked');
+      const isOther = selected && selected.value === "Other";
+      scopeOtherText.classList.toggle("hidden", !isOther);
+      if (!isOther) scopeOtherText.value = "";
+    }
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!validateStep(current)) return;
+
+    const q = qualify();
+    setHiddenQualification(q);
+
+    submitBtn.disabled = true;
+    statusLine.style.color = "rgba(154,164,178,.95)";
+    statusLine.textContent = "Submitting...";
+
+    try {
+      await submitToNetlify();
+
+      // Post-submit message (keeps your qualified/not-qualified logic)
+      steps.forEach(s => s.classList.add("hidden"));
+
+      const msg = document.createElement("div");
+      msg.className = "result";
+
+      if (q.qualified) {
+        msg.innerHTML = `
+          <div class="badge ok"><span>Submitted</span></div>
+          <p style="margin:10px 0 0; color: var(--text); line-height:1.4">
+            Thank you. We received your questionnaire.
+          </p>
+          ${CONFIG.calendlyUrl && CONFIG.calendlyUrl !== "YOUR_CALENDLY_LINK"
+            ? `<p style="margin:10px 0 0" class="small">
+                 <a href="${CONFIG.calendlyUrl}" target="_blank" rel="noopener">Schedule a call</a>
+               </p>`
+            : ``}
+          <p style="margin:10px 0 0" class="small">
+            We will not spam you or sell your information. We will only contact you to discuss your project.
+          </p>
+        `;
+      } else {
+        msg.innerHTML = `
+          <div class="badge no"><span>Submitted</span></div>
+          <p style="margin:10px 0 0; color: var(--text); line-height:1.4">
+            Thank you for reaching out and for the project details. Based on our current capacity and project fit, we are likely not the right match for this project at this time.
+          </p>
+          <p style="margin:10px 0 0" class="small">
+            We appreciate the opportunity, and we wish you success with your project.
+          </p>
+          <p style="margin:10px 0 0" class="small">
+            We will not spam you or sell your information. We will only contact you if needed regarding this inquiry.
+          </p>
+        `;
+      }
+
+      document.querySelector(".content").appendChild(msg);
+
+    } catch (err) {
+      submitBtn.disabled = false;
+      statusLine.style.color = "rgba(255,107,107,.95)";
+      statusLine.textContent = "Submission failed. Please try again, or contact us directly.";
+      console.error(err);
+    }
+  });
+
+  // Init
+  showStep(1);
+  finalBadge.className = "badge";
+  finalText.textContent = "When you submit, we will review and follow up.";
+</script>
+</body>
+</html>
