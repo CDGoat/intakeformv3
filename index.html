@@ -89,7 +89,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 <body>
 
 <div class="intake-landing" id="landingScreen">
-  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg">
+  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg" loading="eager" decoding="async" fetchpriority="high">
   <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Your Design Journey Begins Here...</h1>
@@ -98,7 +98,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-wrap intake-wrap-hero" id="formWrap" style="display:none">
-  <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg">
+  <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg" loading="eager" decoding="async" fetchpriority="low">
   <div class="intake-wrap-overlay"></div>
   <div class="intake-wrap-inner">
   <div class="intake-brand">
@@ -343,7 +343,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-landing" id="thankYou" style="display:none">
-  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg">
+  <img data-src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg" id="thankYouBg" loading="lazy" decoding="async">
   <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Thank you. We will be in touch soon.</h1>
@@ -355,16 +355,15 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 (function(){
   var landingScreen = document.getElementById("landingScreen");
   var formWrap = document.getElementById("formWrap");
-  document.getElementById("btnEnter").addEventListener("click", function(){
-    landingScreen.style.display = "none";
-    formWrap.style.display = "";
-  });
+  
 
   var STEP_TITLES = {1:"Contact",2:"Project basics",3:"Project details",4:"Consent"};
   var STEP_HEROES = {1:"top-down-view-river.jpg",2:"man-and-dog-watching-waterfall.jpg",3:"iStock-1373285830-scaled.jpg",4:"plant-close-up-1536x1024.jpg"};
   var TOTAL = 4;
   var current = 1;
   var stepHeroBg = document.getElementById("stepHeroBg");
+  var thankYouBg = document.getElementById("thankYouBg");
+  var preloadedImages = {};
 
   var form = document.getElementById("intakeForm");
   var btnNext = document.getElementById("btnNext");
@@ -376,6 +375,37 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
   var thankYou = document.getElementById("thankYou");
   var scopeOtherRadio = document.getElementById("scopeOtherRadio");
   var scopeOtherDetail = document.getElementById("scopeOtherDetail");
+
+  function preloadImage(src){
+    if(!src || preloadedImages[src]) return;
+    preloadedImages[src] = true;
+    var img = new Image();
+    img.decoding = "async";
+    img.src = src;
+  }
+
+  function ensureThankYouImageLoaded(){
+    if(!thankYouBg || thankYouBg.getAttribute("src")) return;
+    var src = thankYouBg.getAttribute("data-src");
+    if(src) thankYouBg.setAttribute("src", src);
+  }
+
+  function preloadStepAssets(){
+    Object.keys(STEP_HEROES).forEach(function(key){
+      preloadImage(STEP_HEROES[key]);
+    });
+    if(thankYouBg) preloadImage(thankYouBg.getAttribute("data-src"));
+  }
+
+  document.getElementById("btnEnter").addEventListener("click", function(){
+    landingScreen.style.display = "none";
+    formWrap.style.display = "";
+    if(window.requestIdleCallback){
+      requestIdleCallback(preloadStepAssets, {timeout: 1200});
+    }else{
+      setTimeout(preloadStepAssets, 150);
+    }
+  });
 
   document.querySelectorAll('input[name="Scope"]').forEach(function(r){
     r.addEventListener("change",function(){
@@ -396,6 +426,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
     statusMsg.textContent = "";
     statusMsg.style.color = "";
     if(STEP_HEROES[n]) stepHeroBg.src = STEP_HEROES[n];
+    if(STEP_HEROES[n+1]) preloadImage(STEP_HEROES[n+1]);
   }
 
   function setError(msg){
@@ -523,6 +554,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
   if(params.get("submitted")==="1"){
     landingScreen.style.display = "none";
     formWrap.style.display = "none";
+    ensureThankYouImageLoaded();
     thankYou.style.display = "";
     history.replaceState(null,"",window.location.pathname);
   }
