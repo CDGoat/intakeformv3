@@ -470,10 +470,29 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
     if(current>1) showStep(current-1);
   });
 
+  form.addEventListener("keydown", function(e){
+    if(e.key !== "Enter" || e.shiftKey) return;
+    var tag = (e.target.tagName || "").toUpperCase();
+    if(tag === "TEXTAREA") return;
+    e.preventDefault();
+    if(current < TOTAL){
+      if(!validateStep(current)) return;
+      showStep(current+1);
+      return;
+    }
+    if(btnSubmit.style.display !== "none") btnSubmit.click();
+  });
+
   var API_URL = "https://client-vetting-form.replit.app";
 
   form.addEventListener("submit",function(e){
     e.preventDefault();
+    if(current!==TOTAL){
+      if(!validateStep(current)) return;
+      showStep(current+1);
+      return;
+    }
+    
     if(!validateStep(current)) return;
 
     statusMsg.textContent = "Submitting...";
