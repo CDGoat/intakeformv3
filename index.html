@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tell Us About Your Project</title>
 <meta name="description" content="Submit your project details through our intake questionnaire. We will review and follow up promptly.">
-<link rel="preload" as="image" href="top-down-view-river.jpg" fetchpriority="high">
-<link rel="prefetch" as="image" href="man-and-dog-watching-waterfall.jpg">
-<link rel="prefetch" as="image" href="iStock-1373285830-scaled.jpg">
-<link rel="prefetch" as="image" href="plant-close-up-1536x1024.jpg">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -93,7 +89,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 <body>
 
 <div class="intake-landing" id="landingScreen">
-  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg" loading="eager" decoding="async" fetchpriority="high">  <div class="intake-landing-overlay"></div>
+  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg">
+  <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Your Design Journey Begins Here...</h1>
     <button type="button" class="intake-landing-btn" id="btnEnter">ENTER</button>
@@ -101,7 +98,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-wrap intake-wrap-hero" id="formWrap" style="display:none">
-  <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg" loading="eager" decoding="async" fetchpriority="high">  <div class="intake-wrap-overlay"></div>
+  <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg">
+  <div class="intake-wrap-overlay"></div>
   <div class="intake-wrap-inner">
   <div class="intake-brand">
     <div>
@@ -345,7 +343,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-landing" id="thankYou" style="display:none">
-  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg" loading="lazy" decoding="async" fetchpriority="low">  <div class="intake-landing-overlay"></div>
+  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg">
+  <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Thank you. We will be in touch soon.</h1>
     <p class="intake-landing-quote">"It's a new dawn, it's a new day, it's a new life for me, and I'm feeling good." ~Nina Simone</p>
@@ -366,23 +365,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
   var TOTAL = 4;
   var current = 1;
   var stepHeroBg = document.getElementById("stepHeroBg");
-  var preloadedStepHeroes = {};
 
-  function preloadStepHero(step){
-    var heroSrc = STEP_HEROES[step];
-    if(!heroSrc || preloadedStepHeroes[heroSrc]) return;
-    var img = new Image();
-    img.decoding = "async";
-    img.src = heroSrc;
-    preloadedStepHeroes[heroSrc] = img;
-  }
-
-  function preloadUpcomingStepHero(step){
-    preloadStepHero(step+1);
-  }
-
-  preloadStepHero(1);
-  preloadUpcomingStepHero(1);
   var form = document.getElementById("intakeForm");
   var btnNext = document.getElementById("btnNext");
   var btnBack = document.getElementById("btnBack");
@@ -413,7 +396,6 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
     statusMsg.textContent = "";
     statusMsg.style.color = "";
     if(STEP_HEROES[n]) stepHeroBg.src = STEP_HEROES[n];
-    preloadUpcomingStepHero(n);
   }
 
   function setError(msg){
@@ -470,29 +452,10 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
     if(current>1) showStep(current-1);
   });
 
-  form.addEventListener("keydown", function(e){
-    if(e.key !== "Enter" || e.shiftKey) return;
-    var tag = (e.target.tagName || "").toUpperCase();
-    if(tag === "TEXTAREA") return;
-    e.preventDefault();
-    if(current < TOTAL){
-      if(!validateStep(current)) return;
-      showStep(current+1);
-      return;
-    }
-    if(btnSubmit.style.display !== "none") btnSubmit.click();
-  });
-
   var API_URL = "https://client-vetting-form.replit.app";
 
   form.addEventListener("submit",function(e){
     e.preventDefault();
-    if(current!==TOTAL){
-      if(!validateStep(current)) return;
-      showStep(current+1);
-      return;
-    }
-    
     if(!validateStep(current)) return;
 
     statusMsg.textContent = "Submitting...";
