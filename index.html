@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tell Us About Your Project</title>
 <meta name="description" content="Submit your project details through our intake questionnaire. We will review and follow up promptly.">
+<link rel="preload" as="image" href="top-down-view-river.jpg" fetchpriority="high">
+<link rel="dns-prefetch" href="//client-vetting-form.replit.app">
+<link rel="dns-prefetch" href="//formsubmit.co">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -89,7 +92,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 <body>
 
 <div class="intake-landing" id="landingScreen">
-  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg">
+  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg" fetchpriority="high" decoding="async">  
   <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Your Design Journey Begins Here...</h1>
@@ -98,7 +101,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-wrap intake-wrap-hero" id="formWrap" style="display:none">
-  <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg">
+    <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg" loading="lazy" decoding="async">
   <div class="intake-wrap-overlay"></div>
   <div class="intake-wrap-inner">
   <div class="intake-brand">
@@ -343,7 +346,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-landing" id="thankYou" style="display:none">
-  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg">
+  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg" loading="lazy" decoding="async">
   <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Thank you. We will be in touch soon.</h1>
@@ -358,10 +361,19 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
   document.getElementById("btnEnter").addEventListener("click", function(){
     landingScreen.style.display = "none";
     formWrap.style.display = "";
+    preloadStepImages();
   });
 
   var STEP_TITLES = {1:"Contact",2:"Project basics",3:"Project details",4:"Consent"};
   var STEP_HEROES = {1:"top-down-view-river.jpg",2:"man-and-dog-watching-waterfall.jpg",3:"iStock-1373285830-scaled.jpg",4:"plant-close-up-1536x1024.jpg"};
+
+    function preloadStepImages(){
+    Object.keys(STEP_HEROES).forEach(function(key){
+      var img = new Image();
+      img.decoding = "async";
+      img.src = STEP_HEROES[key];
+    });
+  }
   var TOTAL = 4;
   var current = 1;
   var stepHeroBg = document.getElementById("stepHeroBg");
@@ -517,6 +529,12 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
     form.appendChild(nextInput);
 
     form.submit();
+  }
+  
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(preloadStepImages, {timeout: 1500});
+  } else {
+    setTimeout(preloadStepImages, 900);
   }
 
   var params = new URLSearchParams(window.location.search);
