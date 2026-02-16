@@ -463,6 +463,17 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
   btnBack.addEventListener("click",function(){
     if(current>1) showStep(current-1);
   });
+  
+  form.addEventListener("keydown", function(e){
+    if(e.key !== "Enter") return;
+    if(e.target && e.target.tagName === "TEXTAREA") return;
+
+    if(current < TOTAL){
+      e.preventDefault();
+      if(!validateStep(current)) return;
+      showStep(current+1);
+    }
+  });
 
   var API_URL = "https://client-vetting-form.replit.app";
 
@@ -530,7 +541,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 
     form.submit();
   }
-  
+
   if ("requestIdleCallback" in window) {
     requestIdleCallback(preloadStepImages, {timeout: 1500});
   } else {
