@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tell Us About Your Project</title>
 <meta name="description" content="Submit your project details through our intake questionnaire. We will review and follow up promptly.">
-<link rel="preload" as="image" href="top-down-view-river.jpg" fetchpriority="high">
-<link rel="dns-prefetch" href="//client-vetting-form.replit.app">
-<link rel="dns-prefetch" href="//formsubmit.co">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -91,24 +88,16 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </head>
 <body>
 
-<div class="intake-landing" id="landingScreen">
-  <img src="top-down-view-river.jpg" alt="" class="intake-landing-bg" fetchpriority="high" decoding="async">  
-  <div class="intake-landing-overlay"></div>
-  <div class="intake-landing-content">
-    <h1 class="intake-landing-title">Your Design Journey Begins Here...</h1>
-    <button type="button" class="intake-landing-btn" id="btnEnter">ENTER</button>
-  </div>
-</div>
-
-<div class="intake-wrap intake-wrap-hero" id="formWrap" style="display:none">
-    <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg" loading="lazy" decoding="async">
+<div class="intake-wrap intake-wrap-hero" id="formWrap">
+  <img src="top-down-view-river.jpg" alt="" class="intake-wrap-bg" id="stepHeroBg">
   <div class="intake-wrap-overlay"></div>
   <div class="intake-wrap-inner">
   <div class="intake-brand">
     <div>
-      <h1 class="intake-title">Tell us about your project.</h1>
+      <h1 class="intake-title">Your Design Journey Begins Here...</h1>
+      <p class="intake-subtitle" style="color:rgba(255,255,255,0.78);margin-top:6px">Tell us about your project.</p>
     </div>
-    <div class="intake-small">Estimated time, 2 to 4 minutes.</div>
+    <div class="intake-small" style="color:rgba(255,255,255,0.7)">Estimated time, 2 to 4 minutes.</div>
   </div>
 
   <div class="intake-card" role="main" aria-label="Project Intake Wizard">
@@ -346,7 +335,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 </div>
 
 <div class="intake-landing" id="thankYou" style="display:none">
-  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg" loading="lazy" decoding="async">
+  <img src="man-exploring-rain-forest.jpg" alt="" class="intake-landing-bg">
   <div class="intake-landing-overlay"></div>
   <div class="intake-landing-content">
     <h1 class="intake-landing-title">Thank you. We will be in touch soon.</h1>
@@ -356,24 +345,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
 
 <script>
 (function(){
-  var landingScreen = document.getElementById("landingScreen");
-  var formWrap = document.getElementById("formWrap");
-  document.getElementById("btnEnter").addEventListener("click", function(){
-    landingScreen.style.display = "none";
-    formWrap.style.display = "";
-    preloadStepImages();
-  });
-
   var STEP_TITLES = {1:"Contact",2:"Project basics",3:"Project details",4:"Consent"};
   var STEP_HEROES = {1:"top-down-view-river.jpg",2:"man-and-dog-watching-waterfall.jpg",3:"iStock-1373285830-scaled.jpg",4:"plant-close-up-1536x1024.jpg"};
-
-    function preloadStepImages(){
-    Object.keys(STEP_HEROES).forEach(function(key){
-      var img = new Image();
-      img.decoding = "async";
-      img.src = STEP_HEROES[key];
-    });
-  }
   var TOTAL = 4;
   var current = 1;
   var stepHeroBg = document.getElementById("stepHeroBg");
@@ -463,17 +436,6 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
   btnBack.addEventListener("click",function(){
     if(current>1) showStep(current-1);
   });
-  
-  form.addEventListener("keydown", function(e){
-    if(e.key !== "Enter") return;
-    if(e.target && e.target.tagName === "TEXTAREA") return;
-
-    if(current < TOTAL){
-      e.preventDefault();
-      if(!validateStep(current)) return;
-      showStep(current+1);
-    }
-  });
 
   var API_URL = "https://client-vetting-form.replit.app";
 
@@ -542,15 +504,10 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--fg);line-heig
     form.submit();
   }
 
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(preloadStepImages, {timeout: 1500});
-  } else {
-    setTimeout(preloadStepImages, 900);
-  }
-
+  var formWrap = document.getElementById("formWrap");
+  var thankYou = document.getElementById("thankYou");
   var params = new URLSearchParams(window.location.search);
   if(params.get("submitted")==="1"){
-    landingScreen.style.display = "none";
     formWrap.style.display = "none";
     thankYou.style.display = "";
     history.replaceState(null,"",window.location.pathname);
