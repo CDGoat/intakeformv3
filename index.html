@@ -1,730 +1,486 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Tell Us About Your Project</title>
-<meta name="description" content="Submit your project details through our intake questionnaire. We will review and follow up promptly.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="description" content="Share a few details about your project and we'll be in touch." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
+  /* ORIGINAL DARK THEME (restored) */
   --bg:#071A1E;
-  --bg2:#0F2428;
-  --bg3:rgba(9,29,33,0.86);
+  --bg2:#0d2a2f;
   --fg:#E9EFEA;
   --fg70:rgba(233,239,234,0.72);
-  --fg50:rgba(233,239,234,0.56);
-  --fg30:rgba(233,239,234,0.36);
-  --fg15:rgba(233,239,234,0.16);
-  --fg08:rgba(233,239,234,0.10);
-  --fg04:rgba(233,239,234,0.05);
+  --fg50:rgba(233,239,234,0.50);
+  --fg30:rgba(233,239,234,0.32);
+  --fg08:rgba(233,239,234,0.08);
   --moss:#C2A46F;
-  --moss70:rgba(194,164,111,0.75);
-  --moss30:rgba(194,164,111,0.35);
-  --moss15:rgba(194,164,111,0.18);
-  --moss08:rgba(194,164,111,0.12);
-  --clay:#91A7A3;
-  --clay40:rgba(145,167,163,0.40);
-  --clay15:rgba(145,167,163,0.16);
-  --clay08:rgba(145,167,163,0.10);
-  --warm:#123139;
-  --warm2:rgba(233,239,234,0.18);
-  --err:#FFC9C0;
-  --border:rgba(233,239,234,0.22);
+  --moss70:rgba(194,164,111,0.70);
+  --moss20:rgba(194,164,111,0.20);
+  --moss10:rgba(194,164,111,0.12);
+  --border:rgba(233,239,234,0.18);
   --font-display:'Playfair Display',Georgia,serif;
   --font-body:'Jost',system-ui,sans-serif;
-  --r:10px;
-  --shadow:0 2px 20px rgba(0,0,0,0.30),0 1px 4px rgba(0,0,0,0.25);
-  --shadow-lg:0 28px 70px rgba(0,0,0,0.42),0 6px 20px rgba(0,0,0,0.36);
+
+  /* NEW: background image (place the file next to this HTML as: top-down-view-river.jpg) */
+  --bg-img: url("./assets/top-down-view-river.jpg");
+  --bg-dim:rgba(4,14,16,0.78);      /* darken for luxury readability */
+  --bg-dim2:rgba(7,26,30,0.92);     /* edge vignette */
 }
 
 html{scroll-behavior:smooth}
-body{font-family:var(--font-body);background:var(--bg);color:var(--fg);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--fg);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
 
-/* ─── BACKGROUND (no images) ─── */
-.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg-vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 20%,transparent 0%,rgba(2,12,15,0.58) 62%,rgba(2,10,12,0.84) 100%)}
-.bg-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.55}
-.bg-blob-1{width:700px;height:700px;top:-240px;right:-200px;background:radial-gradient(circle,rgba(194,164,111,0.20) 0%,transparent 72%)}
-.bg-blob-2{width:560px;height:560px;bottom:-180px;left:-130px;background:radial-gradient(circle,rgba(16,66,55,0.28) 0%,transparent 70%)}
-.bg-blob-3{width:420px;height:420px;top:46%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(233,239,234,0.10) 0%,transparent 72%)}
-/* subtle contour texture */
-.bg-texture{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23e9efea' stroke-width='0.45' stroke-opacity='0.65'%3E%3Cpath d='M8 14C26 5 54 7 72 18'/%3E%3Cpath d='M6 34C24 25 54 26 73 38'/%3E%3Cpath d='M8 55C27 46 55 47 74 58'/%3E%3Cpath d='M10 72C28 64 55 65 71 74'/%3E%3C/g%3E%3C/svg%3E");background-size:180px 180px}
+/* NEW: photo background layer + luxury overlay */
+.bg-photo{
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translateZ(0);
+  filter: saturate(0.92) contrast(1.05);
+}
+.bg-photo::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(1200px 700px at 50% 25%, rgba(10,48,57,0.42), transparent 60%),
+    radial-gradient(900px 600px at 20% 85%, rgba(0,0,0,0.28), transparent 62%),
+    linear-gradient(180deg, var(--bg-dim), rgba(4,14,16,0.62) 55%, rgba(4,14,16,0.82));
+}
+.bg-photo::after{
+  content:"";
+  position:absolute; inset:-2px;
+  background:
+    radial-gradient(1200px 900px at 50% 55%, transparent 40%, var(--bg-dim2) 78%, var(--bg-dim2));
+  opacity:0.9;
+}
 
-/* ─── PAGE LAYOUT ─── */
-.page-outer{position:relative;z-index:1;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:56px 20px 90px}
-.page-inner{width:100%;max-width:800px}
+/* bg */
+.bg-fixed{position:fixed;inset:0;z-index:1;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(110px);opacity:0.9}
+.b1{width:640px;height:640px;top:-220px;right:-200px;background:radial-gradient(circle,rgba(194,164,111,0.16) 0%,transparent 70%)}
+.b2{width:520px;height:520px;bottom:-170px;left:-120px;background:radial-gradient(circle,rgba(10,70,72,0.22) 0%,transparent 70%)}
 
-/* ─── HEADER ─── */
-.site-header{text-align:center;margin-bottom:52px;animation:fadeUp 0.8s ease both}
-.site-logo{margin-bottom:32px}
-.site-logo-emblem{width:56px;height:56px;margin:0 auto 12px;position:relative}
-.site-logo-emblem svg{width:100%;height:100%}
-.site-logo-name{font-family:var(--font-body);font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--fg50);font-weight:400}
-.site-header h1{font-family:var(--font-display);font-size:clamp(36px,5.5vw,58px);font-weight:300;line-height:1.15;color:var(--fg);letter-spacing:-0.5px;margin-bottom:18px}
-.site-header h1 em{font-style:italic;color:#D0B27C}
-.site-header p{font-size:15px;color:var(--fg50);max-width:46ch;margin:0 auto;font-weight:300;letter-spacing:0.1px;line-height:1.65}
-.header-ornament{display:flex;align-items:center;gap:14px;margin:28px auto 0;width:fit-content}
-.header-ornament-line{width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,160,122,0.5))}
-.header-ornament-line.r{background:linear-gradient(90deg,rgba(184,160,122,0.5),transparent)}
-.header-ornament-dot{width:5px;height:5px;border-radius:50%;background:rgba(184,160,122,0.6)}
+/* layout */
+.outer{position:relative;z-index:2;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:64px 20px 96px}
+.inner{width:100%;max-width:580px}
 
-/* ─── PROGRESS ─── */
-.progress-wrap{margin-bottom:32px;animation:fadeUp 0.8s 0.1s ease both}
-.progress-steps-row{display:flex;gap:2px;margin-bottom:14px}
-.seg{flex:1;height:1px;border-radius:0;background:var(--warm2);transition:background 0.45s ease}
-.seg.done{background:var(--moss70)}
-.seg.active{background:var(--moss)}
-.progress-labels{display:flex;justify-content:space-between}
-.progress-label{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--fg50);font-weight:400}
-.progress-time{font-size:11px;color:var(--fg30);letter-spacing:0.5px}
+/* header */
+header{text-align:center;margin-bottom:48px;animation:up 0.7s ease both}
+.logo-mark{width:44px;height:44px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(184,160,122,0.35);border-radius:50%;backdrop-filter:blur(6px)}
+.logo-mark svg{color:#B8A07A}
+h1{font-family:var(--font-display);font-size:clamp(32px,5vw,50px);font-weight:300;line-height:1.15;color:var(--fg);margin-bottom:14px;letter-spacing:-0.3px;text-shadow:0 10px 26px rgba(0,0,0,0.35)}
+h1 em{font-style:italic;color:#D0B27C}
+header p{font-size:14.5px;color:var(--fg50);max-width:40ch;margin:0 auto;font-weight:300;line-height:1.7}
 
-/* ─── CARD ─── */
-.card{background:rgba(9,29,33,0.92);border:1px solid var(--warm2);border-radius:6px;overflow:hidden;animation:fadeUp 0.8s 0.18s ease both;box-shadow:var(--shadow-lg)}
+/* ornament */
+.orn{display:flex;align-items:center;gap:12px;margin:22px auto 0;width:fit-content}
+.orn-l{width:40px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,160,122,0.45))}
+.orn-l.r{background:linear-gradient(90deg,rgba(184,160,122,0.45),transparent)}
+.orn-d{width:4px;height:4px;border-radius:50%;background:rgba(184,160,122,0.55)}
 
-/* ─── STEP HEADER ─── */
-.step-header{padding:38px 42px 30px;border-bottom:1px solid var(--fg08);position:relative;overflow:hidden;background:linear-gradient(120deg,rgba(11,35,40,0.98),rgba(16,46,52,0.98));}
-.step-header>*{position:relative;z-index:1}
-.step-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.step-eyebrow-num{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#8C7A63;font-weight:500}
-.step-eyebrow-line{flex:1;max-width:32px;height:1px;background:rgba(184,160,122,0.4)}
-.step-title{font-family:var(--font-display);font-size:30px;font-weight:400;color:var(--fg);line-height:1.2}
-.step-desc{margin-top:8px;font-size:13.5px;color:var(--fg50);line-height:1.6;font-weight:300;max-width:52ch}
+/* form card */
+.card{
+  background:rgba(6,20,23,0.82);
+  border:1px solid rgba(233,239,234,0.18);
+  border-radius:6px;
+  overflow:hidden;
+  animation:up 0.7s 0.12s ease both;
+  box-shadow:0 26px 70px rgba(0,0,0,0.50),0 6px 18px rgba(0,0,0,0.30);
+  backdrop-filter: blur(10px);
+}
+.form-body{padding:38px 40px 32px}
 
-/* ─── FORM BODY ─── */
-.step-body{padding:34px 42px;background:linear-gradient(145deg,rgba(5,21,26,0.96),rgba(9,33,29,0.92))}
+/* section label */
+.section-label{font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#8C7A63;font-weight:500;margin-bottom:20px}
 
-/* ─── GRID ─── */
-.fg{display:grid;gap:22px}
-.fg-2{grid-template-columns:1fr 1fr}
-@media(max-width:640px){.fg-2{grid-template-columns:1fr}}
+/* grid */
+.grid{display:grid;gap:18px}
+.grid-2{grid-template-columns:1fr 1fr}
+@media(max-width:560px){.grid-2{grid-template-columns:1fr}.form-body{padding:28px 22px 24px}.nav{padding:18px 22px 26px}}
 
-/* ─── FIELD ─── */
-.field-meta{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
-.field-meta label{font-size:12.5px;color:var(--fg70);font-weight:400;letter-spacing:0.2px}
-.field-req{font-size:7px;color:#0A181B;background:#C2A46F;letter-spacing:0.8px;font-weight:700;text-transform:uppercase;padding:1.5px 5px;border-radius:2px}
-.field-opt{font-size:10.5px;color:var(--fg30);font-style:italic}
-.field-sub{display:block;margin-top:3px;font-size:11.5px;color:var(--fg30);font-weight:300;font-style:italic;line-height:1.4}
+/* divider */
+.sep{border:none;border-top:1px solid var(--fg08);margin:28px 0}
 
-/* ─── INPUTS — high contrast dark theme ─── */
+/* field */
+.field label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--fg50);font-weight:400;letter-spacing:0.2px;margin-bottom:7px}
+.req-badge{font-size:6.5px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:#0A181B;background:#B8A07A;padding:1px 3.5px;border-radius:2px;flex-shrink:0}
 .field input[type="text"],
 .field input[type="email"],
 .field input[type="tel"],
 .field select,
 .field textarea{
-  width:100%;padding:13px 16px;
-  background:#0d2a2f;
-  border:1px solid rgba(233,239,234,0.30);
-  border-radius:4px;
-  color:#E9EFEA;
-  font-family:var(--font-body);font-size:14px;font-weight:400;
+  width:100%;
+  padding:12px 14px;
+  background:rgba(13,42,47,0.92);
+  border:1px solid rgba(233,239,234,0.22);
+  border-radius:3px;
+  color:var(--fg);
+  font-family:var(--font-body);
+  font-size:14px;
+  font-weight:300;
   appearance:none;-webkit-appearance:none;
-  transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;
-  line-height:1.5;letter-spacing:0.1px
+  transition:border-color 0.18s,box-shadow 0.18s,background 0.18s;
+  line-height:1.5
 }
+.field input:hover,.field select:hover,.field textarea:hover{background:rgba(14,48,56,0.92)}
 .field select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(233,239,234,0.55)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' fill='none'%3E%3Cpath d='M1 1l4.5 5 4.5-5' stroke='rgba(233,239,234,0.45)' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;
-  background-position:right 14px center;
-  padding-right:36px;
-  background-color:#0d2a2f;
+  background-position:right 13px center;
+  padding-right:34px;
   cursor:pointer
 }
-.field select option{background:#0d2a2f;color:#E9EFEA}
-.field textarea{min-height:104px;resize:vertical;line-height:1.65}
-.field input::placeholder,.field textarea::placeholder{color:rgba(233,239,234,0.35)}
+.field select option{background:#0d2a2f;color:var(--fg)}
+.field textarea{min-height:90px;resize:vertical;line-height:1.6}
+.field input::placeholder,.field textarea::placeholder{color:rgba(233,239,234,0.28)}
 .field input:focus,.field select:focus,.field textarea:focus{
   outline:none;
   border-color:var(--moss70);
-  background:#0f3039;
-  color:#E9EFEA;
-  caret-color:#E9EFEA;
-  box-shadow:0 0 0 3px var(--moss15)
+  box-shadow:0 0 0 3px rgba(194,164,111,0.14);
+  color:var(--fg)
 }
-.field input.err,.field select.err,.field textarea.err{border-color:var(--clay40);box-shadow:0 0 0 3px var(--clay08)}
-.field-hint{margin-top:7px;font-size:12px;color:var(--fg30);line-height:1.45;font-weight:300}
+.field input.err,.field select.err,.field textarea.err{
+  border-color:rgba(255,150,130,0.6);
+  box-shadow:0 0 0 3px rgba(255,150,130,0.10)
+}
 
-/* ─── RADIO CARDS ─── */
-.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-@media(max-width:500px){.radio-grid{grid-template-columns:1fr}}
-.rc{position:relative}
-.rc input[type="radio"]{position:absolute;opacity:0;width:0;height:0}
-.rc-label{display:flex;align-items:center;gap:11px;padding:13px 16px;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:all 0.2s ease;background:#0d2a2f;user-select:none}.rc-label:hover{border-color:var(--moss30);background:var(--moss08)}
-.rc input:checked+.rc-label{border-color:rgba(184,160,122,0.6);background:rgba(194,164,111,0.08);box-shadow:none}
-.rc-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--fg30);flex-shrink:0;transition:all 0.2s ease;position:relative;background:rgba(233,239,234,0.08)}
-.rc input:checked+.rc-label .rc-dot{border-color:#B8A07A;background:#B8A07A}
-.rc input:checked+.rc-label .rc-dot::after{content:'';position:absolute;inset:3.5px;border-radius:50%;background:#F5F3EF}
-.rc-text{font-size:13px;color:var(--fg70);font-weight:300;line-height:1.3}
+/* consent */
+.consent{
+  position:relative;
+  display:flex;gap:13px;align-items:flex-start;
+  padding:18px;border:1px solid var(--border);border-radius:3px;background:rgba(13,42,47,0.92);
+  cursor:pointer;transition:background 0.18s;user-select:none;margin-top:4px
+}
+.consent:hover{background:rgba(15,48,57,0.92)}
+.cbox{width:20px;height:20px;border-radius:4px;border:1.5px solid rgba(194,164,111,0.4);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.18s;background:rgba(233,239,234,0.04)}
+.consent.on .cbox{background:#B8A07A;border-color:#B8A07A}
+.cbox svg{opacity:0;transition:opacity 0.18s}
+.consent.on .cbox svg{opacity:1}
 
-/* ─── SCOPE OTHER ─── */
-.scope-other-reveal{display:none;margin-top:10px}
+/* keep checkbox accessible but hidden */
+.consent input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+  width:1px;height:1px;
+}
 
-/* ─── INFOBOX ─── */
-.infobox{display:flex;gap:14px;padding:16px 20px;border-radius:2px;background:#0d2a2f;border-left:2px solid rgba(184,160,122,0.6);margin-top:6px}
-.infobox-leaf{flex-shrink:0;margin-top:2px;color:#B8A07A}
-.infobox p{font-size:12.5px;color:var(--fg50);line-height:1.6;font-weight:300;font-style:italic}
+.consent-text{font-size:13px;color:var(--fg50);line-height:1.55;font-weight:300}
+.consent-text strong{color:var(--fg70);font-weight:500;display:block;margin-bottom:3px;font-size:13.5px}
 
-/* ─── DIVIDER ─── */
-.divider{border:none;border-top:1px solid var(--fg08);margin:26px 0;position:relative}
-.divider-ornament{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(5,21,26,0.96);padding:0 12px;color:var(--fg30);font-size:13px}
+/* footnote */
+.footnote{margin-top:14px;font-size:11.5px;color:var(--fg30);line-height:1.5;font-style:italic;font-weight:300}
 
-/* ─── CONSENT ─── */
-.consent-wrap{display:flex;gap:16px;padding:22px;border:1px solid var(--border);border-radius:2px;background:#0d2a2f;cursor:pointer;transition:background 0.2s;user-select:none}
-.consent-wrap:hover{background:#0f3039}
-.cbox{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--moss30);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;background:rgba(233,239,234,0.06)}
-.consent-wrap.checked .cbox{background:#B8A07A;border-color:#B8A07A}
-.cbox svg{opacity:0;transition:opacity 0.2s}
-.consent-wrap.checked .cbox svg{opacity:1}
-.consent-wrap input{position:absolute;opacity:0;width:0;height:0}
-.consent-copy b{display:block;font-size:13.5px;color:var(--fg);font-weight:500;margin-bottom:5px}
-.consent-copy p{font-size:12.5px;color:var(--fg50);line-height:1.55;font-weight:300;font-style:italic}
-
-/* ─── LEGAL ─── */
-.legal{margin-top:20px;padding:20px 22px;border-radius:2px;background:rgba(233,239,234,0.04);border:1px solid var(--fg08)}
-.legal-item{font-size:12px;color:var(--fg50);line-height:1.55;font-weight:300;padding-left:16px;position:relative;margin-bottom:10px}
-.legal-item:last-child{margin:0}
-.legal-item::before{content:'';position:absolute;left:0;top:7px;width:5px;height:1px;background:rgba(184,160,122,0.6)}
-.legal-item strong{color:var(--fg70);font-weight:500}
-
-/* ─── NAV ─── */
-.step-nav{display:flex;align-items:center;justify-content:space-between;padding:22px 42px 32px;border-top:1px solid var(--fg08);gap:12px;flex-wrap:wrap;background:linear-gradient(120deg,rgba(10,31,35,0.98),rgba(12,38,42,0.98));}
-.btn{font-family:var(--font-body);font-size:12px;font-weight:500;border-radius:2px;padding:13px 32px;cursor:pointer;transition:all 0.2s ease;letter-spacing:2px;text-transform:uppercase;border:1px solid transparent;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
-.btn-ghost{background:transparent;border-color:var(--border);color:var(--fg50)}
-.btn-ghost:hover:not(:disabled){border-color:var(--fg50);color:var(--fg70);background:var(--fg04)}
-.btn-ghost:disabled{opacity:0.3;cursor:not-allowed}
-.btn-primary{background:linear-gradient(120deg,#B79354,#C2A46F);color:#0A181B;border-color:transparent;box-shadow:0 8px 24px rgba(194,164,111,0.26);font-weight:600}
-.btn-primary:hover{background:linear-gradient(120deg,#CBAE74,#D5BA87);box-shadow:0 6px 24px rgba(194,164,111,0.35);transform:translateY(-1px)}
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 40px 30px;border-top:1px solid var(--fg08);gap:12px}
+.status{font-size:12.5px;flex:1;text-align:left}
+.status.err-msg{color:#FFC9C0}
+.btn{font-family:var(--font-body);font-size:11.5px;font-weight:500;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:2px;padding:13px 30px;cursor:pointer;transition:all 0.18s;display:inline-flex;align-items:center;gap:7px}
+.btn-primary{background:linear-gradient(120deg,#B79354,#C2A46F);color:#0A181B;font-weight:600;box-shadow:0 6px 20px rgba(194,164,111,0.24)}
+.btn-primary:hover:not(:disabled){background:linear-gradient(120deg,#CBAE74,#D5BA87);transform:translateY(-1px);box-shadow:0 8px 24px rgba(194,164,111,0.32)}
 .btn-primary:active{transform:translateY(0)}
 .btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-.btn-arrow{transition:transform 0.2s}
-.btn:hover .btn-arrow{transform:translateX(3px)}
-.status-msg{font-size:12.5px;color:var(--fg50);flex:1;text-align:center;min-height:18px}
-.status-msg.error{color:var(--err)}
+.arrow{transition:transform 0.18s}
+.btn:hover .arrow{transform:translateX(3px)}
 
-/* ─── STEP VISIBILITY ─── */
-.step{display:none}
-.step.active{display:block;animation:stepIn 0.38s ease both}
-@keyframes stepIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* thank you */
+.ty{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;background:#071A1E}
+.ty.show{display:flex}
+.ty-inner{text-align:center;padding:40px 24px;max-width:460px;animation:up 0.8s ease both}
+.ty-icon{width:64px;height:64px;margin:0 auto 28px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#B8A07A}
+.ty h2{font-family:var(--font-display);font-size:clamp(32px,5vw,48px);font-weight:300;margin-bottom:14px;line-height:1.18}
+.ty p{font-size:14.5px;color:var(--fg50);line-height:1.7;font-weight:300}
+.ty-orn{display:flex;align-items:center;gap:12px;margin:28px auto;width:fit-content}
+.ty-orn .l{width:40px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,160,122,0.4))}
+.ty-orn .r{background:linear-gradient(90deg,rgba(184,160,122,0.4),transparent)}
+.ty-orn .d{width:4px;height:4px;border-radius:50%;background:rgba(184,160,122,0.5)}
+.ty-quote{font-family:var(--font-display);font-style:italic;font-size:17px;color:var(--fg70);line-height:1.7}
+.ty-src{font-size:11px;color:var(--fg30);margin-top:10px;letter-spacing:2.5px;text-transform:uppercase}
 
-/* ─── THANK YOU ─── */
-.thank-you{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:linear-gradient(140deg,#030f12,#09232700);flex-direction:column;background-color:#071A1E}
-.thank-you.visible{display:flex}
-.ty-inner{text-align:center;padding:40px 24px;max-width:520px;animation:fadeUp 0.9s ease both}
-.ty-emblem{width:72px;height:72px;margin:0 auto 30px;background:var(--bg2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center}
-.ty-emblem svg{color:#B8A07A}
-.ty-inner h2{font-family:var(--font-display);font-size:clamp(34px,5vw,52px);font-weight:300;color:var(--fg);margin-bottom:16px;letter-spacing:-0.3px;line-height:1.18}
-.ty-inner p{font-size:15px;color:var(--fg50);line-height:1.7;font-weight:300}
-.ty-ornament{display:flex;align-items:center;gap:14px;margin:32px auto;width:fit-content}
-.ty-ornament-line{width:48px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,160,122,0.4))}
-.ty-ornament-line.r{background:linear-gradient(90deg,rgba(184,160,122,0.4),transparent)}
-.ty-ornament-dot{width:5px;height:5px;border-radius:50%;background:rgba(184,160,122,0.5)}
-.ty-quote{font-family:var(--font-display);font-style:italic;font-size:18px;color:var(--fg70);line-height:1.65}
-.ty-source{font-size:11.5px;color:var(--fg30);margin-top:10px;letter-spacing:2px;text-transform:uppercase}
-
-/* ─── MOBILE ─── */
-@media(max-width:640px){
-  .page-outer{padding:32px 14px 64px}
-  .site-header{margin-bottom:36px}
-  .step-header{padding:28px 22px 22px}
-  .step-body{padding:24px 22px}
-  .step-nav{padding:18px 22px 26px}
-}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
+
 <body>
+<!-- NEW: background image layer -->
+<div class="bg-photo" aria-hidden="true"></div>
 
-<!-- Background (no images, blobs only) -->
-<div class="bg-canvas">
-  <div class="bg-vignette"></div>
-  <div class="bg-blob bg-blob-1"></div>
-  <div class="bg-blob bg-blob-2"></div>
-  <div class="bg-blob bg-blob-3"></div>
+<div class="bg-fixed">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
 </div>
-<div class="bg-texture"></div>
 
-<div class="page-outer" id="formPage">
-  <div class="page-inner">
+<div class="outer" id="formPage">
+  <div class="inner">
 
-    <!-- HEADER -->
-    <header class="site-header">
-      <div class="site-logo">
-        <div class="site-logo-emblem">
-          <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="28" cy="28" r="27" stroke="rgba(184,160,122,0.5)" stroke-width="1"/>
-            <path d="M28 10 C18 16 14 24 14 28 C14 36 20 42 28 46 C36 42 42 36 42 28 C42 24 38 16 28 10Z" stroke="#B8A07A" stroke-width="1" fill="rgba(184,160,122,0.10)"/>
-            <line x1="28" y1="10" x2="28" y2="46" stroke="rgba(184,160,122,0.5)" stroke-width="0.75" stroke-dasharray="2 2"/>
-            <line x1="14" y1="28" x2="42" y2="28" stroke="rgba(184,160,122,0.5)" stroke-width="0.75" stroke-dasharray="2 2"/>
-          </svg>
-        </div>
-        <div class="site-logo-name" style="display:none"></div>
+    <header>
+      <div class="logo-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2C5.5 4.5 3 7 3 10a6 6 0 0012 0c0-3-2.5-5.5-6-8z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <line x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="0.75" stroke-dasharray="1.5 1.5"/>
+        </svg>
       </div>
-      <h1>Your Design Journey<br><em>Begins Here</em></h1>
-      <p>Tell us about your project. We'll review your submission thoughtfully and follow up within one business day.</p>
-      <div class="header-ornament">
-        <div class="header-ornament-line"></div>
-        <div class="header-ornament-dot"></div>
-        <div class="header-ornament-line r"></div>
+      <h1>Let's Talk About<br><em>Your Project</em></h1>
+      <p>A few details is all we need. We'll be in touch within one business day.</p>
+      <div class="orn" aria-hidden="true">
+        <div class="orn-l"></div>
+        <div class="orn-d"></div>
+        <div class="orn-l r"></div>
       </div>
     </header>
 
-    <!-- PROGRESS -->
-    <div class="progress-wrap">
-      <div class="progress-steps-row">
-        <div class="seg active" id="seg1"></div>
-        <div class="seg" id="seg2"></div>
-        <div class="seg" id="seg3"></div>
-        <div class="seg" id="seg4"></div>
-      </div>
-      <div class="progress-labels">
-        <div class="progress-label" id="progressLabel">Step 1 of 4 — Contact</div>
-        <div class="progress-time">Est. 2–4 min</div>
-      </div>
-    </div>
-
-    <!-- CARD -->
     <div class="card">
-      <form id="intakeForm" novalidate>
+      <form id="theForm" novalidate>
 
-        <!-- ─── STEP 1 ─── -->
-        <div class="step active" id="step1">
-          <div class="step-header">
-            <div class="step-eyebrow"><span class="step-eyebrow-num">01</span><div class="step-eyebrow-line"></div></div>
-            <div class="step-title">Contact Information</div>
-            <div class="step-desc">How can we reach you? Your details are held in confidence and used only to follow up on this inquiry.</div>
-          </div>
-          <div class="step-body">
-            <div class="fg fg-2">
-              <div class="field">
-                <div class="field-meta"><label for="firstName">First name</label><span class="field-req">Required</span></div>
-                <input id="firstName" name="First Name" type="text" autocomplete="given-name" placeholder="Jane" required>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="lastName">Last name</label><span class="field-req">Required</span></div>
-                <input id="lastName" name="Last Name" type="text" autocomplete="family-name" placeholder="Smith" required>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="email">Email address</label><span class="field-req">Required</span></div>
-                <input id="email" name="Email" type="email" autocomplete="email" placeholder="jane@example.com" required>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="phone">Phone number</label><span class="field-req">Required</span></div>
-                <input id="phone" name="Phone" type="tel" autocomplete="tel" placeholder="(206) 555-0100" maxlength="14" required>
-              </div>
-            </div>
-            <div class="infobox" style="margin-top:24px">
-              <div class="infobox-leaf">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C5 4 3 6.5 3 9a5 5 0 0010 0c0-2.5-2-5-5-7z" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" stroke-width="0.8" stroke-dasharray="1.5 1.5"/></svg>
-              </div>
-              <p>We will never spam you or sell your information. We'll only contact you to discuss your project. If we're not the right fit, we'll let you know promptly — we respect your time.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- ─── STEP 2 ─── -->
-        <div class="step" id="step2">
-          <div class="step-header">
-            <div class="step-eyebrow"><span class="step-eyebrow-num">02</span><div class="step-eyebrow-line"></div></div>
-            <div class="step-title">Project Basics</div>
-            <div class="step-desc">Help us understand the scale, location, and timing of what you're envisioning.</div>
-          </div>
-          <div class="step-body">
-            <div class="fg fg-2">
-              <div class="field">
-                <div class="field-meta"><label for="projectType">Project type</label><span class="field-req">Required</span></div>
-                <select id="projectType" name="Project Type" required>
-                  <option value="">Select one</option>
-                  <option>Single-family, new construction</option>
-                  <option>Single-family, renovation</option>
-                  <option>Multifamily, new construction</option>
-                  <option>Multifamily, renovation</option>
-                  <option>Not sure yet</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="timeline">Ideal start timeline</label><span class="field-req">Required</span></div>
-                <select id="timeline" name="Timeline" required>
-                  <option value="">Select one</option>
-                  <option>0 to 3 months</option>
-                  <option>3 to 6 months</option>
-                  <option>6 to 12 months</option>
-                  <option>12+ months</option>
-                </select>
-                <div class="field-hint">When would you like design work to begin?</div>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="budgetRange">Estimated construction budget</label><span class="field-req">Required</span></div>
-                <select id="budgetRange" name="Budget Range" required>
-                  <option value="">Select one</option>
-                  <option>Under $500,000</option>
-                  <option>$500,000 to $750,000</option>
-                  <option>$750,000 to $1,000,000</option>
-                  <option>$1,000,000 to $2,000,000</option>
-                  <option>$2,000,000 to $4,000,000</option>
-                  <option>Over $4,000,000</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="projectSize">Anticipated project size</label><span class="field-opt">Optional</span></div>
-                <select id="projectSize" name="Project Size">
-                  <option value="">Select one</option>
-                  <option>Less than 1,000 sf</option>
-                  <option>1,000 to 2,000 sf</option>
-                  <option>2,000 to 3,000 sf</option>
-                  <option>3,000 to 4,000 sf</option>
-                  <option>4,000 to 5,000 sf</option>
-                  <option>More than 5,000 sf</option>
-                  <option>Unsure</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="siteState">Project site state</label><span class="field-req">Required</span></div>
-                <select id="siteState" name="Site State" required>
-                  <option value="">Select one</option>
-                  <option>WA</option>
-                  <option>OR</option>
-                  <option>ID</option>
-                  <option>CA</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="siteCity">Project site city</label><span class="field-req">Required</span></div>
-                <input id="siteCity" name="Site City" type="text" placeholder="Seattle" required>
-              </div>
-            </div>
-            <hr class="divider" style="margin-top:26px">
-            <div class="fg">
-              <div class="field">
-                <div class="field-meta"><label for="siteOwned">Do you currently own the property?</label><span class="field-req">Required</span></div>
-                <select id="siteOwned" name="Site Owned" required>
-                  <option value="">Select one</option>
-                  <option>Yes</option>
-                  <option>No</option>
-                  <option>Under contract</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ─── STEP 3 ─── -->
-        <div class="step" id="step3">
-          <div class="step-header">
-            <div class="step-eyebrow"><span class="step-eyebrow-num">03</span><div class="step-eyebrow-line"></div></div>
-            <div class="step-title">Project Details</div>
-            <div class="step-desc">A few more specifics so we can understand where you are in the process and what you need from us.</div>
-          </div>
-          <div class="step-body">
-            <div class="fg fg-2">
-              <div class="field">
-                <div class="field-meta"><label for="workedWithArchitect">Have you worked with an architect before?</label><span class="field-req">Required</span></div>
-                <select id="workedWithArchitect" name="Worked With Architect" required>
-                  <option value="">Select one</option>
-                  <option>Yes</option>
-                  <option>No</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="haveSurvey">Do you have a site survey?</label><span class="field-req">Required</span></div>
-                <select id="haveSurvey" name="Have Survey" required>
-                  <option value="">Select one</option>
-                  <option>Yes</option>
-                  <option>No</option>
-                  <option>Not sure</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="financing">Is financing secured or planned?</label><span class="field-req">Required</span></div>
-                <select id="financing" name="Financing" required>
-                  <option value="">Select one</option>
-                  <option>Secured</option>
-                  <option>Planned</option>
-                  <option>Not sure yet</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-meta"><label for="decisionMaker">Are you the primary decision-maker?</label><span class="field-req">Required</span></div>
-                <select id="decisionMaker" name="Decision Maker" required>
-                  <option value="">Select one</option>
-                  <option>Yes</option>
-                  <option>Shared</option>
-                  <option>No</option>
-                </select>
-              </div>
-            </div>
-            <hr class="divider" style="margin-top:26px">
+        <div class="form-body">
+          <!-- Contact -->
+          <div class="section-label">Contact</div>
+          <div class="grid grid-2" style="margin-bottom:18px">
             <div class="field">
-              <div class="field-meta" style="margin-bottom:12px"><label>Scope of work</label><span class="field-req">Required — select one</span></div>
-              <div class="radio-grid">
-                <div class="rc"><input type="radio" name="Scope" id="scope1" value="New home design"><label for="scope1" class="rc-label"><span class="rc-dot"></span><span class="rc-text">New home design</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope2" value="Full home renovation"><label for="scope2" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Full home renovation</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope3" value="Major addition or renovation"><label for="scope3" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Major addition or renovation</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope4" value="Kitchen renovation"><label for="scope4" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Kitchen renovation</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope5" value="Primary suite renovation"><label for="scope5" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Primary suite renovation</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope6" value="Basement or attic conversion"><label for="scope6" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Basement or attic conversion</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope7" value="ADU or DADU"><label for="scope7" class="rc-label"><span class="rc-dot"></span><span class="rc-text">ADU or DADU</span></label></div>
-                <div class="rc"><input type="radio" name="Scope" id="scope8" value="Multifamily planning"><label for="scope8" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Multifamily planning</span></label></div>
-                <div class="rc" style="grid-column:1/-1"><input type="radio" name="Scope" id="scopeOtherRadio" value="Other"><label for="scopeOtherRadio" class="rc-label"><span class="rc-dot"></span><span class="rc-text">Other — describe below</span></label></div>
-              </div>
-              <div class="scope-other-reveal" id="scopeOtherWrap">
-                <input id="scopeOtherDetail" name="Scope Detail" type="text" placeholder="Briefly describe the scope of work">
-              </div>
+              <label for="firstName">First name <span class="req-badge">Required</span></label>
+              <input id="firstName" name="First Name" type="text" autocomplete="given-name" placeholder="Jane" required />
             </div>
-            <hr class="divider" style="margin-top:26px">
             <div class="field">
-              <div class="field-meta"><label for="goals">What matters most to you in this project?</label><span class="field-opt">Optional</span></div>
-              <textarea id="goals" name="Project Goals" placeholder="e.g. long-term durability, thoughtful planning, natural light, energy performance, a design that ages beautifully…"></textarea>
-              <div class="field-hint">Anything you'd like us to know as we consider your inquiry.</div>
+              <label for="lastName">Last name <span class="req-badge">Required</span></label>
+              <input id="lastName" name="Last Name" type="text" autocomplete="family-name" placeholder="Smith" required />
             </div>
           </div>
-        </div>
 
-        <!-- ─── STEP 4 ─── -->
-        <div class="step" id="step4">
-          <div class="step-header">
-            <div class="step-eyebrow"><span class="step-eyebrow-num">04</span><div class="step-eyebrow-line"></div></div>
-            <div class="step-title">One Last Step</div>
-            <div class="step-desc">Please confirm your consent and review our disclosures before submitting.</div>
-          </div>
-          <div class="step-body">
-            <div class="fg">
-              <label class="consent-wrap" id="consentBox" for="agreePrivacy">
-                <input id="agreePrivacy" type="checkbox" name="Consent" value="Yes, I consent to being contacted" required>
-                <div class="cbox" id="consentCheck">
-                  <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5 6.5-8" stroke="#0A181B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <div class="consent-copy">
-                  <b>I consent to being contacted about this inquiry</b>
-                  <p>We will not spam you or sell your information. We'll only contact you to discuss your project. This is not a contract for services or a commitment of any kind.</p>
-                </div>
-              </label>
-              <div class="legal">
-                <div class="legal-item"><strong>Privacy:</strong> This questionnaire is used solely to evaluate project fit and respond to your inquiry. Your information is not shared with third parties.</div>
-                <div class="legal-item"><strong>Not legal advice:</strong> Nothing here constitutes legal advice. We make no guarantees regarding permitting outcomes, timelines, or construction costs.</div>
-                <div class="legal-item"><strong>Not a contract:</strong> Submitting this form does not create an architect-client relationship, engagement agreement, or contractual obligation of any kind.</div>
-              </div>
+          <div class="grid grid-2">
+            <div class="field">
+              <label for="email">Email <span class="req-badge">Required</span></label>
+              <input id="email" name="Email" type="email" autocomplete="email" placeholder="jane@example.com" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone <span class="req-badge">Required</span></label>
+              <input id="phone" name="Phone" type="tel" autocomplete="tel" placeholder="(206) 555-0100" maxlength="14" inputmode="tel" required>
             </div>
           </div>
+
+          <hr class="sep" />
+
+          <!-- Project -->
+          <div class="section-label">Project</div>
+          <div class="grid grid-2" style="margin-bottom:18px">
+            <div class="field">
+              <label for="projectType">Type of project <span class="req-badge">Required</span></label>
+              <select id="projectType" name="Project Type" required>
+                <option value="">Select one</option>
+                <option>New home</option>
+                <option>Renovation</option>
+                <option>Addition</option>
+                <option>ADU or DADU</option>
+                <option>Multifamily</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="location">Project location <span class="req-badge">Required</span></label>
+              <input id="location" name="Location" type="text" placeholder="City, State" required />
+            </div>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="field">
+              <label for="budget">Approximate budget</label>
+              <select id="budget" name="Budget">
+                <option value="">Prefer not to say</option>
+                <option>Under $500K</option>
+                <option>$500K – $1M</option>
+                <option>$1M – $2M</option>
+                <option>$2M – $4M</option>
+                <option>$4M+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="timeline">When are you hoping to start?</label>
+              <select id="timeline" name="Timeline">
+                <option value="">Not sure yet</option>
+                <option>Within 3 months</option>
+                <option>3–6 months</option>
+                <option>6–12 months</option>
+                <option>12+ months</option>
+              </select>
+            </div>
+          </div>
+
+          <hr class="sep" />
+
+          <!-- Message -->
+          <div class="section-label">Anything else?</div>
+          <div class="field">
+            <label for="message">Tell us a bit about your vision <span style="color:var(--fg30);font-style:italic">(optional)</span></label>
+            <textarea id="message" name="Message" placeholder="What are you dreaming of? Any style references, priorities, or questions are welcome."></textarea>
+          </div>
+
+          <hr class="sep" style="margin-bottom:22px" />
+
+          <!-- Consent -->
+          <label class="consent" id="consentEl" for="consent">
+            <input id="consent" type="checkbox" required />
+            <div class="cbox" aria-hidden="true">
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+                <path d="M1 4.5l3 3.5 6-7" stroke="#0A181B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="consent-text">
+              <strong>You may contact me about this inquiry</strong>
+              We won't spam you or share your details. This isn't a commitment — just a conversation.
+            </div>
+          </label>
+
+          <div class="footnote">Submitting this form does not create an architect-client relationship or any contractual obligation.</div>
         </div>
 
-        <!-- Hidden fields -->
-        <input type="hidden" name="_subject" value="New Project Intake Submission">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="true">
-
-        <!-- NAV -->
-        <div class="step-nav">
-          <button type="button" class="btn btn-ghost" id="btnBack" disabled>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Back
-          </button>
-          <div class="status-msg" id="statusMsg"></div>
-          <button type="button" class="btn btn-primary" id="btnNext">
-            Continue
-            <svg class="btn-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-          <button type="submit" class="btn btn-primary" id="btnSubmit" style="display:none">
-            Submit Inquiry
-            <svg class="btn-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div class="nav">
+          <div class="status" id="statusMsg" role="status" aria-live="polite"></div>
+          <button type="submit" class="btn btn-primary" id="btnSubmit">
+            Send Inquiry
+            <svg class="arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M4 2.5l5 4-5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
           </button>
         </div>
 
+        <!-- hidden -->
+        <input type="hidden" name="_subject" value="New Project Inquiry" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="true" />
       </form>
     </div>
 
   </div>
 </div>
 
-<!-- THANK YOU -->
-<div class="thank-you" id="thankYouScreen">
-  <div class="bg-canvas">
-    <div class="bg-blob bg-blob-1"></div>
-    <div class="bg-blob bg-blob-2"></div>
-    <div class="bg-blob bg-blob-3"></div>
-  </div>
+<!-- Thank you -->
+<div class="ty" id="ty" aria-hidden="true">
   <div class="ty-inner">
-    <div class="ty-emblem">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 14l8 8 12-12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="ty-icon" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M3 12l7 7L21 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
     <h2>Thank you.<br>We'll be in touch.</h2>
-    <p>Someone from our team will review your inquiry carefully and follow up with you promptly.</p>
-    <div class="ty-ornament">
-      <div class="ty-ornament-line"></div>
-      <div class="ty-ornament-dot"></div>
-      <div class="ty-ornament-line r"></div>
+    <p>We'll review your inquiry and follow up within one business day.</p>
+    <div class="ty-orn" aria-hidden="true">
+      <div class="l"></div>
+      <div class="d"></div>
+      <div class="r"></div>
     </div>
-    <div class="ty-quote">"It's a new dawn, it's a new day, it's a new life for me — and I'm feeling good."</div>
-    <div class="ty-source">— Nina Simone</div>
+    <div class="ty-quote">"It's a new dawn, it's a new day,<br>it's a new life for me."</div>
+    <div class="ty-src">— Nina Simone</div>
   </div>
 </div>
 
 <script>
 (function(){
-  var TITLES = {1:"Contact",2:"Project Basics",3:"Project Details",4:"Consent & Submit"};
-  var TOTAL = 4;
-  var current = 1;
+  var form    = document.getElementById("theForm");
+  var btnSub  = document.getElementById("btnSubmit");
+  var status  = document.getElementById("statusMsg");
+  var consent = document.getElementById("consent");
+  var conEl   = document.getElementById("consentEl");
+  var ty      = document.getElementById("ty");
 
-  var form       = document.getElementById("intakeForm");
-  var btnNext    = document.getElementById("btnNext");
-  var btnBack    = document.getElementById("btnBack");
-  var btnSub     = document.getElementById("btnSubmit");
-  var statusMsg  = document.getElementById("statusMsg");
-  var progLbl    = document.getElementById("progressLabel");
-  var tyScreen   = document.getElementById("thankYouScreen");
-  var consentBox = document.getElementById("consentBox");
-  var agreeChk   = document.getElementById("agreePrivacy");
-  var scopeOR    = document.getElementById("scopeOtherRadio");
-  var scopeOW    = document.getElementById("scopeOtherWrap");
-  var scopeOI    = document.getElementById("scopeOtherDetail");
-
-  // Consent toggle
-  consentBox.addEventListener("click", function(){
-    agreeChk.checked = !agreeChk.checked;
-    consentBox.classList.toggle("checked", agreeChk.checked);
-  });
-
-  // Scope other reveal
-  document.querySelectorAll('input[name="Scope"]').forEach(function(r){
-    r.addEventListener("change", function(){
-      scopeOW.style.display = scopeOR.checked ? "block" : "none";
-      if(!scopeOR.checked) scopeOI.value = "";
-    });
-  });
-
-  function setSegs(n){
-    for(var i=1;i<=TOTAL;i++){
-      var s=document.getElementById("seg"+i);
-      s.classList.remove("active","done");
-      if(i<n) s.classList.add("done");
-      else if(i===n) s.classList.add("active");
-    }
+  // Fix: sync visual state to real checkbox state (prevents double-toggle bug)
+  function syncConsent(){
+    conEl.classList.toggle("on", consent.checked);
   }
+  consent.addEventListener("change", syncConsent);
+  syncConsent();
 
-  function showStep(n){
-    current=n;
-    document.querySelectorAll(".step").forEach(function(s){s.classList.remove("active")});
-    document.getElementById("step"+n).classList.add("active");
-    progLbl.textContent="Step "+n+" of "+TOTAL+" — "+TITLES[n];
-    setSegs(n);
-    btnBack.disabled = n===1;
-    btnNext.style.display = n<TOTAL?"":"none";
-    btnSub.style.display  = n===TOTAL?"":"none";
-    statusMsg.textContent="";
-    statusMsg.classList.remove("error");
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
-
-  function setErr(msg){
-    statusMsg.textContent=msg;
-    statusMsg.classList.add("error");
-  }
-
-  function val(id){return(document.getElementById(id).value||"").trim();}
-  function validEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
-  function validPhone(p){var d=p.replace(/\D/g,"");return d.length===10||(d.length===11&&d[0]==="1");}
-
-  // Auto-format phone as (XXX) XXX-XXXX
-  var phoneInput = document.getElementById("phone");
-  phoneInput.addEventListener("input", function(e){
-    var raw = this.value.replace(/\D/g,"");
-    if(raw.length>11) raw=raw.slice(0,11);
-    if(raw.length===11&&raw[0]==="1") raw=raw.slice(1);
-    var formatted="";
-    if(raw.length<=3) formatted=raw;
-    else if(raw.length<=6) formatted="("+raw.slice(0,3)+") "+raw.slice(3);
-    else formatted="("+raw.slice(0,3)+") "+raw.slice(3,6)+"-"+raw.slice(6,10);
-    this.value=formatted;
-  });
-  phoneInput.addEventListener("blur", function(){
-    var d=this.value.replace(/\D/g,"");
-    if(d.length===11&&d[0]==="1") d=d.slice(1);
-    if(d.length>0&&d.length<10) markErr("phone");
+  // Phone format
+  var ph = document.getElementById("phone");
+  ph.addEventListener("input", function(){
+    var raw = this.value.replace(/\D/g,"").slice(0,10);
+    if(raw.length <= 3) this.value = raw;
+    else if(raw.length <= 6) this.value = "("+raw.slice(0,3)+") "+raw.slice(3);
+    else this.value = "("+raw.slice(0,3)+") "+raw.slice(3,6)+"-"+raw.slice(6);
   });
 
-  function validateStep(n){
-    clearErr();
-    if(n===1){
-      if(!val("firstName")||!val("lastName")||!val("email")||!val("phone")){setErr("Please complete all required fields.");return false;}
-      if(!validEmail(val("email"))){setErr("Please enter a valid email address.");markErr("email");return false;}
-      if(!validPhone(val("phone"))){setErr("Please enter a valid 10-digit US phone number.");markErr("phone");return false;}
-    }
-    if(n===2){
-      if(!val("projectType")||!val("timeline")||!val("budgetRange")||!val("siteState")||!val("siteCity")||!val("siteOwned")){setErr("Please complete all required fields.");return false;}
-    }
-    if(n===3){
-      if(!val("workedWithArchitect")||!val("haveSurvey")||!val("financing")||!val("decisionMaker")){setErr("Please complete all required fields.");return false;}
-      var scope=document.querySelector('input[name="Scope"]:checked');
-      if(!scope){setErr("Please select a scope of work.");return false;}
-      if(scope.value==="Other"&&!val("scopeOtherDetail")){setErr("Please describe your scope of work.");markErr("scopeOtherDetail");return false;}
-    }
-    if(n===4){
-      if(!agreeChk.checked){setErr("Please confirm your consent to continue.");return false;}
-    }
-    return true;
-  }
+  function val(id){ return (document.getElementById(id).value||"").trim(); }
+  function validEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+  function markErr(id){ var el=document.getElementById(id); if(el) el.classList.add("err"); }
+  function clearErr(){ document.querySelectorAll(".err").forEach(function(e){e.classList.remove("err")}); }
 
-  function markErr(id){var el=document.getElementById(id);if(el)el.classList.add("err");}
-  function clearErr(){document.querySelectorAll(".err").forEach(function(e){e.classList.remove("err");});statusMsg.textContent="";statusMsg.classList.remove("error");}
-
-  // Prevent Enter from submitting — advance to next step or stay put
-  form.addEventListener("keydown", function(e){
-    if(e.key === "Enter"){
-      e.preventDefault();
-      if(current < TOTAL){
-        if(!validateStep(current)) return;
-        showStep(current + 1);
-      }
-    }
-  });
-
-  btnNext.addEventListener("click",function(){if(!validateStep(current))return;showStep(current+1);});
-  btnBack.addEventListener("click",function(){if(current>1)showStep(current-1);});
-
-  var API_URL = "https://client-vetting-form.replit.app";
-
-  form.addEventListener("submit",function(e){
+  form.addEventListener("submit", function(e){
     e.preventDefault();
-    if(!validateStep(current))return;
-    statusMsg.textContent="Submitting…";
-    statusMsg.classList.remove("error");
-    btnSub.disabled=true;
+    clearErr();
+    status.textContent = "";
+    status.classList.remove("err-msg");
 
-    var scope=document.querySelector('input[name="Scope"]:checked');
-    var payload={
-      firstName:val("firstName"),lastName:val("lastName"),email:val("email"),phone:val("phone"),
-      projectType:val("projectType"),timeline:val("timeline"),budgetRange:val("budgetRange"),
-      projectSize:val("projectSize")||null,siteState:val("siteState"),siteCity:val("siteCity"),
-      siteOwned:val("siteOwned"),workedWithArchitect:val("workedWithArchitect"),haveSurvey:val("haveSurvey"),
-      financing:val("financing"),decisionMaker:val("decisionMaker"),
-      scopeSelected:scope?scope.value:"",scopeOtherDetail:val("scopeOtherDetail")||null,
-      projectGoals:val("goals")||null
-    };
+    var ok = true;
 
-    function doSubmit(){
-      form.action="https://formsubmit.co/101d78657fba88189add5c312b577b65";
-      form.method="POST";
-      var afterUrl=window.location.href.split("?")[0];
-      var ni=document.createElement("input");
-      ni.type="hidden";ni.name="_next";ni.value=afterUrl+"?submitted=1";
-      form.appendChild(ni);
-      form.submit();
+    if(!val("firstName")){ markErr("firstName"); ok=false; }
+    if(!val("lastName")){ markErr("lastName"); ok=false; }
+
+    var em = val("email");
+    if(!em || !validEmail(em)){ markErr("email"); ok=false; }
+
+    if(!val("projectType")){ markErr("projectType"); ok=false; }
+    if(!val("location")){ markErr("location"); ok=false; }
+
+    var phoneVal = val("phone").replace(/\D/g,"");
+    if(phoneVal.length !== 10){
+      markErr("phone");
+      ok = false;
     }
 
-    if(API_URL){
-      fetch(API_URL+"/api/submissions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
-        .then(function(r){if(!r.ok)throw new Error();return r.json();})
-        .then(doSubmit).catch(doSubmit);
-    } else { doSubmit(); }
+    if(!consent.checked){
+      status.textContent="Please confirm you'd like to be contacted.";
+      status.classList.add("err-msg");
+      ok=false;
+    }
+
+    if(!ok){
+      if(!status.textContent){
+        status.textContent = "Please fill in the required fields.";
+        status.classList.add("err-msg");
+      }
+      return;
+    }
+
+    btnSub.disabled = true;
+    status.textContent = "Sending…";
+
+    // Submit via formsubmit
+    var afterUrl = window.location.href.split("?")[0] + "?done=1";
+    form.action = "https://formsubmit.co/101d78657fba88189add5c312b577b65";
+    form.method = "POST";
+
+    // Fix: prevent duplicate _next inputs on retries
+    var existingNext = form.querySelector('input[name="_next"]');
+    if(!existingNext){
+      var ni = document.createElement("input");
+      ni.type="hidden"; ni.name="_next"; ni.value=afterUrl;
+      form.appendChild(ni);
+    } else {
+      existingNext.value = afterUrl;
+    }
+
+    form.submit();
   });
 
-  // Check submitted param
-  if(new URLSearchParams(window.location.search).get("submitted")==="1"){
+  if(new URLSearchParams(window.location.search).get("done")==="1"){
     document.getElementById("formPage").style.display="none";
-    tyScreen.classList.add("visible");
+    ty.classList.add("show");
+    ty.setAttribute("aria-hidden","false");
     history.replaceState(null,"",window.location.pathname);
   }
 })();
